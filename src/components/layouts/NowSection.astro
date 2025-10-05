@@ -1,0 +1,40 @@
+---
+import ProseWrapper from "../layouts/ProseWrapper.astro";
+---
+
+<section class="now-section">
+	<ProseWrapper>
+		<slot />
+	</ProseWrapper>
+</section>
+
+<style>
+	.now-section {
+		border-left: 1px dashed var(--color-gray-300);
+		padding-left: 2.5rem;
+		margin-bottom: var(--space-3xl);
+		margin-left: 0.5rem;
+	}
+
+	.now-section :global(h3) {
+		margin-top: -3.4rem;
+	}
+
+	.now-section::before {
+		content: "";
+		width: 12px;
+		height: 12px;
+		border: 2px solid var(--color-gray-300);
+		background: var(--color-cream);
+		display: inline-block;
+		margin-left: -2.9rem;
+		margin-right: 1.7rem;
+		position: relative;
+		top: -1rem;
+		border-radius: 50%;
+	}
+
+	.now-section :global(p:last-child) {
+		margin-bottom: 0;
+	}
+</style>

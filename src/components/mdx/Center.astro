@@ -1,0 +1,19 @@
+---
+// Center.astro - A centered container component
+---
+
+<div class="center">
+    <slot />
+</div>
+
+<style>
+    .center {
+        text-align: center;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-body);
+    }
+</style>

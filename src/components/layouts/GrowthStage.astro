@@ -1,0 +1,37 @@
+---
+import Tooltip from "../mdx/Tooltip.astro";
+
+interface Props {
+	stage: "evergreen" | "budding" | "seedling";
+}
+
+const { stage } = Astro.props;
+
+const tooltipContent = {
+	evergreen:
+		"Evergreens are ideas I've invested significant time into. They are refined, edited, and won't significantly change – aside from the occasional trimming.",
+	budding:
+		"Buddings are ideas I've revised and worked on a bit. They're starting to grow, but still need refinement.",
+	seedling:
+		"Seedlings are ideas I've just started that are rough, unrefined, and need some time to grow.",
+};
+---
+
+<Tooltip maxWidth={300}>
+	<p class="growth-stage">{stage}</p>
+	<p slot="content">{tooltipContent[stage]}</p>
+</Tooltip>
+
+<style>
+	.growth-stage {
+		display: inline-block;
+		cursor: pointer;
+		font-family: var(--font-sans);
+		font-size: var(--font-size-xs);
+		color: var(--color-gray-800);
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		font-weight: bold;
+		padding-right: var(--space-xs);
+	}
+</style>

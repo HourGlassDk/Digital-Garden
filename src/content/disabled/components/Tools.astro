@@ -1,0 +1,37 @@
+<div class="main-layout">
+	<slot />
+</div>
+
+<style>
+	.main-layout {
+		grid-column: 1/4;
+		max-width: 100%;
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+		grid-gap: var(--space-16);
+		align-content: center;
+		align-items: center;
+		text-align: center;
+		justify-items: center;
+		justify-content: center;
+		margin: var(--space-m) auto 0;
+	}
+
+	.main-layout img {
+		transition: all 400ms ease;
+		max-width: 175px;
+		margin-bottom: 0;
+	}
+
+	.main-layout img:hover {
+		transition: all 400ms ease;
+		transform: translateY(-6px);
+	}
+
+	.main-layout h5 {
+		transition: all 400ms ease;
+		text-align: center;
+		font-weight: 400;
+		margin-bottom: var(--space-s);
+	}
+</style>

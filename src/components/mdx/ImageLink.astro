@@ -1,0 +1,52 @@
+---
+import { Icon } from "astro-icon/components";
+import Tooltip from "./Tooltip.astro";
+
+interface Props {
+	href: string;
+}
+
+const { href } = Astro.props;
+---
+
+<Tooltip>
+	<div class="container">
+		<a href={href}><slot /></a>
+	</div>
+	<div slot="content">
+		<a href={href} class="external-url">
+			{href}
+			<Icon
+				name="heroicons:arrow-top-right-on-square-20-solid"
+				size={18}
+				class="icon"
+			/>
+		</a>
+	</div>
+</Tooltip>
+
+<style>
+	.external-url {
+		color: var(--color-gray-600);
+		transition: color 0.2s ease-in-out;
+		text-align: center;
+	}
+
+	.external-url:hover {
+		color: var(--color-primary-green);
+	}
+
+	.icon {
+		position: relative;
+		top: 3px;
+	}
+
+	.container {
+		display: inline-block;
+		align-items: center;
+		justify-content: center;
+		position: relative;
+		left: 0;
+		top: 0;
+	}
+</style>

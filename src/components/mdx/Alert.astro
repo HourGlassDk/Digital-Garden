@@ -1,0 +1,68 @@
+---
+const { title } = Astro.props;
+---
+
+<div class="alert-container">
+	<svg
+		width={133}
+		height={118}
+		fill="none"
+		preserveAspectRatio="xMinYMin meet"
+		xmlns="http://www.w3.org/2000/svg"
+	>
+		<path
+			fill-rule="evenodd"
+			clip-rule="evenodd"
+			d="M61.463 3.803c2.31-4 8.083-4 10.392 0l60.185 104.244c2.31 4-.577 9-5.196 9H6.474c-4.619 0-7.505-5-5.196-9L61.463 3.803zm-4.332 32.803a1 1 0 01.998-1.055h17.062a1 1 0 01.998 1.055l-2.286 41.145a1 1 0 01-.998.944h-12.49a1 1 0 01-.998-.944L57.13 36.606zm9.53 68.456c5.294 0 9.587-4.293 9.587-9.588a9.588 9.588 0 00-9.588-9.588 9.588 9.588 0 00-9.588 9.588c0 5.295 4.293 9.588 9.588 9.588z"
+			fill="var(--color-salmon)"></path>
+	</svg>
+	<div class="inner-container">
+		{Astro.props.title && <h2 class="alert-title">{Astro.props.title}</h2>}
+		<slot />
+	</div>
+</div>
+
+<style>
+	.alert-container {
+		grid-column: 1/4 !important;
+		display: inline-flex;
+		width: 100%;
+		max-width: 780px;
+		padding: var(--space-s) var(--space-xs);
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		margin: 0 auto var(--space-l);
+		border: 1px solid var(--color-gray-100);
+		border-radius: var(--border-radius-lg);
+		box-shadow: var(--box-shadow-lg);
+	}
+
+	.alert-container svg {
+		margin: var(--space-m) auto;
+	}
+
+	:global(.inner-container p) {
+		font-size: var(--font-size-base);
+		color: var(--color-gray-800);
+		line-height: var(--leading-loose);
+		max-width: 44ch;
+		margin-bottom: var(--space-m);
+	}
+
+	@media (max-width: 768px) {
+		.inner-container :global(p) {
+			max-width: 100%;
+		}
+	}
+
+	.alert-title {
+		color: var(--color-black);
+		text-align: center;
+		font-size: var(--font-size-xl);
+		font-weight: 600;
+		line-height: var(--leading-tight);
+		margin: 0 auto var(--space-2xs);
+	}
+</style>

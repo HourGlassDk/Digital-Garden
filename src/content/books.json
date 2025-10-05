@@ -1,0 +1,23 @@
+[
+  {
+    "title": "Human Compatible",
+    "subtitle": "Artificial Intelligence and the Problem of Control",
+    "author": "Stuart Russell",
+    "link": "https://www.goodreads.com/book/show/44424399-human-compatible",
+    "id": 1
+  },
+  {
+    "title": "Superintelligence",
+    "subtitle": "Paths, Dangers, Strategies",
+    "author": "Nick Bostrom",
+    "link": "https://www.goodreads.com/book/show/18730279-superintelligence",
+    "id": 2
+  },
+  {
+    "title": "The Alignment Problem",
+    "subtitle": "Machine Learning and Human Values",
+    "author": "Brian Christian",
+    "link": "https://www.goodreads.com/book/show/43694857-the-alignment-problem",
+    "id": 3
+  }
+]

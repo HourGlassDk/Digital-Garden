@@ -1,0 +1,59 @@
+---
+title: "Draft Notes: Reinforcement Learning Fundamentals"
+description: "Working notes on reinforcement learning concepts and algorithms"
+startDate: 2025-10-05
+updated: 2025-10-05
+type: "note"
+topics: ["Machine Learning", "Reinforcement Learning", "AI"]
+growthStage: "seedling"
+draft: true
+---
+
+# Reinforcement Learning Fundamentals
+
+These are working notes on reinforcement learning concepts. This is a draft note that will only appear in development mode.
+
+## Key Concepts
+
+### Markov Decision Processes (MDPs)
+- States (S)
+- Actions (A)
+- Transition function P(s'|s,a)
+- Reward function R(s,a,s')
+- Discount factor γ
+
+### Value Functions
+- **State Value Function V(s)**: Expected return starting from state s
+- **Action Value Function Q(s,a)**: Expected return starting from state s, taking action a
+
+### Policy
+A policy π(a|s) maps states to actions. Goal is to find optimal policy π*.
+
+## Common Algorithms
+
+### Q-Learning
+Off-policy TD control algorithm:
+```
+Q(s,a) ← Q(s,a) + α[r + γ max Q(s',a') - Q(s,a)]
+```
+
+### Policy Gradient Methods
+Directly optimize the policy rather than value functions.
+
+### Actor-Critic Methods
+Combine value function approximation with policy optimization.
+
+## Applications
+- Game playing (AlphaGo)
+- Robotics control
+- Resource management
+- Recommendation systems
+
+## Questions to Explore
+- How do RL agents handle exploration vs exploitation?
+- What are the safety considerations for RL in real-world applications?
+- How can we incorporate human feedback into RL systems?
+
+---
+
+*These notes are a work in progress and will be updated as I learn more about RL.*

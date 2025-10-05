@@ -1,0 +1,108 @@
+---
+const {
+	columns = 2,
+	maxWidth = "1400px",
+	width,
+	alignItems = "center",
+	gridTemplateColumns,
+	gridGap = "var(--space-s)",
+	justifyItems = "center",
+	margin = "var(--space-s) auto var(--space-l)",
+} = Astro.props;
+
+// Calculate minimum column width based on number of columns
+const minColWidth = columns === 2 ? "280px" : "200px";
+const defaultGridTemplate = `repeat(${columns}, minmax(${minColWidth}, 1fr))`;
+
+// Normalize alignment values
+const normalizedAlignment = alignItems === "top" ? "flex-start" : alignItems;
+
+// Use width prop as fallback for maxWidth for backwards compatibility
+const finalMaxWidth = maxWidth || width || "1400px";
+---
+
+<div
+	class:list={["grid-container", `cols-${columns}`]}
+	style={{
+		maxWidth: finalMaxWidth,
+		margin,
+		justifyItems,
+		gridTemplateColumns: gridTemplateColumns || defaultGridTemplate,
+		gridGap,
+		alignItems: normalizedAlignment,
+	}}
+>
+	<slot />
+</div>
+
+<style>
+	.grid-container {
+		width: 100%;
+		grid-column: 1 / 4 !important;
+		display: grid;
+		padding: 0 var(--space-3xs);
+		overflow-x: hidden;
+		justify-content: center;
+	}
+
+	.grid-container :global(p) {
+		font-size: var(--font-size-base);
+		line-height: var(--leading-looser);
+		margin-bottom: var(--space-m);
+	}
+
+	/* Four columns to three columns */
+	@media (max-width: 1200px) {
+		.cols-4 {
+			grid-template-columns: repeat(3, minmax(200px, 1fr)) !important;
+		}
+	}
+
+	/* Three columns to two columns */
+	@media (max-width: 900px) {
+		.cols-4,
+		.cols-3 {
+			grid-template-columns: repeat(2, minmax(200px, 1fr)) !important;
+		}
+	}
+
+	/* All to one column */
+	@media (max-width: 768px) {
+		.grid-container {
+			align-items: start;
+			justify-items: center;
+			grid-template-columns: 1fr !important;
+			grid-gap: var(--space-xs);
+			max-width: 100%;
+			padding: 0;
+		}
+
+		/* Ensure content doesn't overflow on mobile */
+		.grid-container :global(> *) {
+			width: 100% !important;
+			min-width: 0;
+			max-width: 100% !important;
+		}
+	}
+
+	.grid-container :global(div),
+	.grid-container :global(img),
+	.grid-container :global(figure),
+	.grid-container :global(picture) {
+		grid-column: auto !important;
+		margin: 0 auto;
+		border-radius: var(--border-radius-base);
+		max-width: 100%;
+		height: auto;
+		width: 100%;
+		min-width: 0; /* Allow shrinking below min content size */
+	}
+
+	.grid-container :global(img) {
+		margin: var(--space-s) auto 0;
+		width: 100%;
+		height: auto;
+		max-width: 100%;
+		object-fit: contain; /* Ensure image maintains aspect ratio */
+	}
+</style>

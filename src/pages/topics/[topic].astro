@@ -1,0 +1,233 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Title2 from "../../components/mdx/typography/Title2.astro";
+import TitleWithCount from "../../components/layouts/TitleWithCount.astro";
+import PageWrapper from "../../components/layouts/PageWrapper.astro";
+import MasonryGrid from "../../components/layouts/MasonryGrid.astro";
+import EssayCard from "../../components/cards/EssayCard.astro";
+import NoteCard from "../../components/cards/NoteCard.astro";
+// import PatternCard from "../../components/cards/PatternCard.astro";
+// import TalkCard from "../../components/cards/TalkCard.astro";
+// import PodcastCard from "../../components/cards/PodcastCard.astro";
+import NowCard from "../../components/cards/NowCard.astro";
+import SmidgeonCard from "../../components/cards/SmidgeonCard.astro";
+import { getAllTopics, getPostsForTopic } from "../../utils/getTopics";
+import { extractPreview } from "../../utils/extractPreview";
+import type { CollectionEntry } from "astro:content";
+import { Icon } from "astro-icon/components";
+import { extractBaseSlug } from "../../utils/versionUtils";
+
+type Post =
+	| CollectionEntry<"essays">
+	| CollectionEntry<"notes">
+	// | CollectionEntry<"patterns">
+	// | CollectionEntry<"talks">
+	// | CollectionEntry<"podcasts">
+	| CollectionEntry<"now">
+	| CollectionEntry<"smidgeons">;
+
+export async function getStaticPaths() {
+	const topics = await getAllTopics();
+
+	return topics.map((topic) => ({
+		params: { topic: topic.slug },
+		props: { topicName: topic.name },
+	}));
+}
+
+const { topic } = Astro.params;
+const { topicName } = Astro.props;
+const posts = await getPostsForTopic(topic);
+// Sort posts by date (using updated field for most collections, startDate for now posts and smidgeons)
+const sortedPosts = posts.sort((a, b) => {
+	const dateA =
+		a.collection === "now" || a.collection === "smidgeons" ? a.data.startDate : a.data.updated;
+	const dateB =
+		b.collection === "now" || b.collection === "smidgeons" ? b.data.startDate : b.data.updated;
+	return new Date(dateB).getTime() - new Date(dateA).getTime();
+});
+---
+
+<Layout title={`${topicName} posts by Karl August Krogh Nybo`}>
+	<PageWrapper>
+		<header style="margin-bottom: var(--space-xl);">
+			<TitleWithCount posts={posts}>
+				<div class="back-link" slot="header-right">
+					<a href="/garden">
+						<Icon name="heroicons:arrow-left" size={16} />
+						<span> Back to Garden </span>
+					</a>
+				</div>
+				{topicName}
+			</TitleWithCount>
+			<Title2>Essays, notes, and smidgeons related to {topicName}</Title2>
+		</header>
+
+		<MasonryGrid>
+			<div class="grid-sizer"></div>
+			{
+				sortedPosts.map((post: Post) => {
+					if (post.collection === "essays") {
+						return (
+							<div class="grid-item">
+								<EssayCard
+									id={post.id}
+									slug={extractBaseSlug(post.id)}
+									title={post.data.title}
+									cover={post.data.cover}
+									growthStage={post.data.growthStage}
+									date={post.data.updated}
+									description={post.data.description}
+								/>
+							</div>
+						);
+					}
+					if (post.collection === "notes") {
+						return (
+							<div class="grid-item">
+								<NoteCard
+									id={post.id}
+									slug={extractBaseSlug(post.id)}
+									title={post.data.title}
+									growthStage={post.data.growthStage}
+									date={post.data.updated}
+									description={post.data.description}
+								/>
+							</div>
+						);
+					}
+					/* if (post.collection === "patterns") {
+						return (
+							<div class="grid-item">
+								<PatternCard
+									id={post.id}
+									slug={extractBaseSlug(post.id)}
+									title={post.data.title}
+									growthStage={post.data.growthStage}
+									date={post.data.updated}
+									description={post.data.description}
+								/>
+							</div>
+						);
+					}
+					if (post.collection === "talks") {
+						return (
+							<div class="grid-item">
+								<TalkCard
+									id={post.id}
+									slug={extractBaseSlug(post.id)}
+									title={post.data.title}
+									cover={post.data.cover}
+									description={post.data.description}
+									date={post.data.updated}
+								/>
+							</div>
+						);
+					}
+					if (post.collection === "podcasts") {
+						return (
+							<div class="grid-item">
+								<PodcastCard
+									id={post.id}
+									url={post.data.url}
+									episodeName={post.data.episodeName}
+									podcastName={post.data.podcastName}
+									date={post.data.updated}
+									podcastCover={post.data.coverImage}
+								/>
+							</div>
+						);
+					} */
+					if (post.collection === "now") {
+						return (
+							<div class="grid-item">
+								<NowCard
+									id={post.id}
+									slug={`now-${post.id}`}
+									title={post.data.title}
+									date={post.data.startDate}
+									preview={extractPreview(post.body || "")}
+								/>
+							</div>
+						);
+					}
+					if (post.collection === "smidgeons") {
+						// Generate preview for smidgeons - extract from body content
+						const preview = extractPreview(post.body || "");
+
+						return (
+							<div class="grid-item">
+								<SmidgeonCard
+									slug={post.id}
+									title={post.data.title}
+									date={post.data.startDate.toISOString()}
+									preview={preview}
+									external={post.data.external}
+									citation={post.data.citation}
+								/>
+							</div>
+						);
+					}
+				})
+			}
+		</MasonryGrid>
+	</PageWrapper>
+</Layout>
+
+<style>
+	.back-link {
+		display: inline-flex;
+		align-items: center;
+		height: 100%;
+		position: relative;
+		left: -2rem;
+	}
+
+	@media (max-width: 1440px) {
+		.back-link {
+			display: inline-flex;
+			top: 0;
+			margin: 0;
+			left: 1rem;
+		}
+	}
+
+	.back-link a {
+		display: inline-flex;
+		align-items: center;
+		position: relative;
+		font-family: var(--font-sans);
+		font-size: var(--font-size-xs);
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		font-weight: bold;
+		transition: all 0.8s cubic-bezier(0.2, 1, 0.8, 1);
+		margin: 0;
+		padding: 0;
+	}
+
+	.back-link svg {
+		width: 0;
+		transition: all 0.8s cubic-bezier(0.2, 1, 0.8, 1);
+		color: var(--color-gray-300);
+		position: relative;
+		top: 1px;
+	}
+
+	.back-link span {
+		display: inline-block;
+		transition: transform 0.3s cubic-bezier(0.2, 1, 0.8, 1);
+		color: var(--color-gray-600);
+	}
+
+	.back-link a:hover svg {
+		width: 16px;
+		margin-right: 2px;
+		color: var(--color-primary-green);
+	}
+
+	.back-link a:hover span {
+		transform: translate3d(3px, 0, 0);
+		color: var(--color-primary-green);
+	}
+</style>

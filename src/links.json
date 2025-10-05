@@ -1,0 +1,22 @@
+[
+  {
+    "ids": [
+      "Example Essay: Understanding AI Alignment"
+    ],
+    "slug": "example-essay",
+    "growthStage": "budding",
+    "description": "A template for writing in-depth essays about AI safety and alignment research",
+    "outboundLinks": [],
+    "inboundLinks": []
+  },
+  {
+    "ids": [
+      "Example Note: Introduction to Neural Networks"
+    ],
+    "slug": "example-note",
+    "growthStage": "seedling",
+    "description": "A template for taking notes on topics you're learning about",
+    "outboundLinks": [],
+    "inboundLinks": []
+  }
+]

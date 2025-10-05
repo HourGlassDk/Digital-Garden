@@ -1,0 +1,100 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div id="mobile-menu" class="mobile-menu">
+	<nav class="mobile-nav">
+		<a href="/garden" class="nav-link">The Garden</a>
+		<a href="/essays" class="nav-link">Essays</a>
+		<a href="/notes" class="nav-link">Notes</a>
+		<a href="/patterns" class="nav-link">Patterns</a>
+		<a href="/smidgeons" class="nav-link">Smidgeons</a>
+		<a href="/talks" class="nav-link">Talks</a>
+		<a href="/podcasts" class="nav-link">Podcasts</a>
+		<a href="/library" class="nav-link">Library</a>
+		<a href="/now" class="nav-link">Now</a>
+		<a href="/about" class="nav-link">About</a>
+	</nav>
+</div>
+
+<style>
+	.mobile-menu {
+		position: fixed;
+		top: 0;
+		right: -100%;
+		width: 100%;
+		height: 100vh;
+		background: var(--color-cream);
+		z-index: 1000;
+		transition: right 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+		padding: var(--space-xl) var(--space-m);
+	}
+
+	.mobile-menu.open {
+		right: 0;
+	}
+
+	.mobile-nav {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-xs);
+		margin-top: var(--space-l);
+	}
+
+	.nav-link {
+		font-family: var(--font-body);
+		font-size: var(--font-size-md);
+		color: var(--color-gray-800);
+		text-decoration: none;
+		transition: color 0.2s ease-in-out;
+	}
+
+	.nav-link:hover {
+		color: var(--color-accent-brown);
+	}
+
+	@media screen and (min-width: 551px) {
+		.mobile-menu {
+			display: none;
+		}
+	}
+</style>
+
+<script>
+	function initializeMobileMenu() {
+		const mobileMenu = document.getElementById("mobile-menu") as HTMLElement;
+		const links = mobileMenu?.querySelectorAll("a");
+
+		if (!mobileMenu || !links) return;
+
+		// Clean up existing listeners
+		links.forEach((link) => {
+			const existingHandler = (link as any)._mobileMenuHandler;
+			if (existingHandler) {
+				link.removeEventListener("click", existingHandler);
+			}
+		});
+
+		// Function to close mobile menu
+		const closeMobileMenu = () => {
+			mobileMenu.classList.remove("open");
+			document.body.style.overflow = "auto";
+		};
+
+		// Create and attach new handlers
+		links.forEach((link) => {
+			// Store handler for cleanup
+			(link as any)._mobileMenuHandler = closeMobileMenu;
+			link.addEventListener("click", closeMobileMenu);
+		});
+
+		// Close menu on view transition start
+		document.addEventListener("astro:before-preparation", closeMobileMenu);
+	}
+
+	// Initialize on page load
+	initializeMobileMenu();
+
+	// Re-initialize after view transitions
+	document.addEventListener("astro:page-load", initializeMobileMenu);
+</script>

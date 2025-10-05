@@ -1,0 +1,242 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+	header: string;
+}
+
+const { header } = Astro.props;
+---
+
+<div class="accordion-container">
+	<button class="accordion-button" aria-label="open disclosure">
+		<div class="header">
+			<Icon name="heroicons:plus-circle" size={22} />
+			<span>{header}</span>
+		</div>
+		<div class="more">
+			<span class="more-text">Read more</span>
+			<Icon name="heroicons:chevron-down" size={20} />
+		</div>
+	</button>
+	<div class="accordion-panel">
+		<slot />
+	</div>
+</div>
+
+<style>
+	.accordion-container {
+		width: 100%;
+		margin: 0 0 3rem;
+		box-shadow: var(--box-shadow-sm);
+	}
+
+	.accordion-button {
+		display: flex;
+		width: 100%;
+		justify-content: space-between;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: var(--space-8);
+		border-radius: 6px;
+		background: #f0f9f8;
+		border: 1px solid #ade3e3;
+		border-left: 6px solid var(--color-primary-green);
+		padding: var(--space-16) var(--space-24);
+		color: var(--color-tertiary-green);
+		transition: all 0.3s ease;
+	}
+
+	.accordion-button:hover {
+		cursor: pointer;
+		background: #dbf3f3;
+	}
+
+	.accordion-button.open {
+		border-radius: 8px 8px 0 0;
+		border-left: 6px solid #ade3e3;
+	}
+
+	.header {
+		color: var(--color-tertiary-green);
+		margin-bottom: 0;
+		flex: 1;
+		min-width: 0;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: var(--space-8);
+		text-align: left;
+		font-size: calc(var(--font-size-base) / 1.25);
+	}
+
+	.header svg {
+		flex-shrink: 0;
+	}
+
+	.header span {
+		font-family: var(--font-sans);
+		padding-bottom: 2px;
+		overflow-wrap: break-word;
+		word-break: break-word;
+	}
+
+	.more {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		gap: var(--space-8);
+		transition: all 0.3s ease;
+	}
+
+	.more span {
+		font-family: var(--font-sans);
+		font-size: calc(var(--font-size-xs) / 1.25);
+		line-height: var(--leading-loose);
+		text-transform: uppercase;
+		letter-spacing: 0.05rem;
+		color: var(--color-secondary-green);
+	}
+
+	.accordion-panel {
+		height: 0;
+		overflow: hidden;
+		opacity: 0;
+		padding: 1.25rem 1.75rem 1rem 1.75rem;
+		border: 1px solid #b8e5e8;
+		border-top: none;
+		border-radius: 0 0 8px 8px;
+	}
+
+	.accordion-panel.open {
+		height: auto;
+		opacity: 1;
+		padding: var(--space-32) var(--space-48);
+		border-radius: 0 0 8px 8px;
+		background: #fff;
+		border: 1px solid #b8e5e8;
+		border-top: none;
+		box-shadow: var(--box-shadow-lg);
+		color: var(--color-gray-800);
+	}
+
+	.accordion-panel :global(p),
+	.accordion-panel :global(ol),
+	.accordion-panel :global(ul),
+	.accordion-panel :global(code),
+	.accordion-panel :global(pre) {
+		margin-bottom: 1rem;
+		line-height: var(--leading-loose);
+		font-weight: 400;
+		font-size: calc(var(--font-size-base) / 1.25);
+	}
+
+	@media (max-width: 768px) {
+		.accordion-button {
+			align-items: flex-start;
+		}
+
+		.header {
+			align-items: flex-start;
+		}
+
+		.header svg {
+			position: relative;
+			top: 0.25rem;
+		}
+
+		.more {
+			position: relative;
+			top: 0.25rem;
+		}
+	}
+</style>
+
+<script>
+	import { animate } from "motion";
+
+	function initializeAccordions() {
+		const buttons = document.querySelectorAll(".accordion-button");
+
+		// Clean up existing listeners
+		buttons.forEach((button) => {
+			const existingHandler = (button as any)._accordionHandler;
+			if (existingHandler) {
+				button.removeEventListener("click", existingHandler);
+			}
+		});
+
+		// Add new listeners
+		buttons.forEach((button) => {
+			const clickHandler = () => {
+				const panel = button.nextElementSibling;
+				const moreText = button.querySelector(".more-text");
+				const chevronIcon = button.querySelector(".more svg");
+
+				button.classList.toggle("open");
+
+				if (button.classList.contains("open")) {
+					// Opening animation
+					if (panel instanceof HTMLElement) {
+						panel.style.display = "block"; // Ensure panel is visible for animation
+						animate(
+							panel,
+							{
+								height: ["0px", `${panel.scrollHeight}px`],
+								opacity: [0, 1],
+							},
+							{
+								duration: 0.3,
+								easing: "ease-in-out",
+							},
+						).then(() => {
+							panel.style.height = "auto";
+						});
+					}
+
+					if (moreText instanceof HTMLElement) {
+						moreText.textContent = "Show less";
+					}
+					if (chevronIcon instanceof SVGElement) {
+						chevronIcon.setAttribute("name", "heroicons:chevron-up");
+					}
+				} else {
+					// Closing animation
+					if (panel instanceof HTMLElement) {
+						panel.style.height = `${panel.scrollHeight}px`; // Set current height before animating
+						animate(
+							panel,
+							{
+								height: [`${panel.scrollHeight}px`, "0px"],
+								opacity: [1, 0],
+							},
+							{
+								duration: 0.3,
+								easing: "ease-in-out",
+							},
+						).then(() => {
+							panel.style.display = "none";
+						});
+
+						if (moreText instanceof HTMLElement) {
+							moreText.textContent = "Read more";
+						}
+						if (chevronIcon instanceof SVGElement) {
+							chevronIcon.setAttribute("name", "heroicons:chevron-down");
+						}
+					}
+				}
+			};
+
+			// Store handler for cleanup
+			(button as any)._accordionHandler = clickHandler;
+			button.addEventListener("click", clickHandler);
+		});
+	}
+
+	// Initialize on page load
+	initializeAccordions();
+
+	// Re-initialize after view transitions
+	document.addEventListener("astro:page-load", initializeAccordions);
+</script>

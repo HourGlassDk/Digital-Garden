@@ -1,0 +1,22 @@
+{
+  "extends": "astro/tsconfigs/strict",
+  "include": [
+    ".astro/types.d.ts",
+    "**/*"
+  ],
+  "exclude": [
+    "dist",
+    "src/components/unique/AIConversation.astro",
+    "src/components/unique/GarminData.astro",
+    "src/components/unique/HackyFormatting.astro",
+    "src/components/unique/InvisiblesFeature.astro",
+    "src/components/unique/MediumMaterialsMeat.astro",
+    "src/components/unique/MultipartIntro.astro",
+    "src/components/unique/MysteriousVoid.astro",
+    "src/components/unique/TweenBox.astro"
+  ],
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "react"
+  }
+}

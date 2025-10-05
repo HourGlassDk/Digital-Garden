@@ -1,0 +1,69 @@
+---
+import GardenHits from "./GardenHits.astro";
+import GardenFilters from "./GardenFilters.astro";
+
+interface Post {
+	id: string;
+	collection: string;
+	data: {
+		type?: string;
+		updated?: string;
+		startDate: string;
+		title?: string;
+		description?: string;
+		growthStage?: string;
+		topics?: string[];
+		cover?: string;
+		podcastName?: string;
+		episodeName?: string;
+		url?: string;
+		conferences?: string[];
+		coverImage?: {
+			src: string;
+			width: number;
+			height: number;
+			format: string;
+		};
+	};
+}
+
+interface TopicInfo {
+	name: string;
+	count: number;
+}
+
+const { allPostData } = Astro.props;
+
+// Calculate topic frequencies at build time
+const topicFrequencies = new Map<string, number>();
+allPostData.forEach((post: Post) => {
+	post.data.topics?.forEach((topic) => {
+		topicFrequencies.set(topic, (topicFrequencies.get(topic) || 0) + 1);
+	});
+});
+
+// Convert to array and sort by frequency
+const sortedTopics: TopicInfo[] = Array.from(topicFrequencies.entries())
+	.map(([name, count]) => ({ name, count }))
+	.sort((a, b) => {
+		// Sort by frequency first (descending)
+		const freqDiff = b.count - a.count;
+		// If frequencies are equal, sort alphabetically
+		return freqDiff !== 0 ? freqDiff : a.name.localeCompare(b.name);
+	});
+
+// Extract just the topic names in order
+const allTopics = sortedTopics.map((t) => t.name);
+---
+
+<div class="search-container">
+	<div>
+		<GardenFilters topics={allTopics} />
+		<GardenHits allPostData={allPostData} />
+	</div>
+</div>
+
+<script define:vars={{ sortedTopics }}>
+	// Make topic data available to client-side code
+	window.topicData = sortedTopics;
+</script>

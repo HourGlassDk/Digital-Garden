@@ -1,0 +1,92 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div class="draft-container">
+	<Icon name="pencil" size="140" />
+	<div>
+		<svg height={2}>
+			<path
+				d="M150,0 L400,0"
+				stroke="var(--color-primary-green)"
+				stroke-width="2"
+				stroke-dasharray="12,8"></path>
+		</svg>
+		<h1>Draft in Progress</h1>
+		<svg height={2}>
+			<path
+				d="M0,0 L150,0"
+				stroke="var(--color-primary-green)"
+				stroke-width="2"
+				stroke-dasharray="12,8"></path>
+		</svg>
+	</div>
+	<p>
+		The quality of writing below this point is haphazard, disjointed, and
+		nonsensical. It's probably a good idea to come back later.
+	</p>
+</div>
+
+<style>
+	.draft-container {
+		grid-column: 1/4 !important;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		margin: var(--space-l) auto;
+		box-shadow: var(--box-shadow-lg);
+		border-radius: var(--border-radius-lg);
+		border: 1px solid var(--color-tinted-cream);
+		padding: var(--space-s);
+		max-width: 1300px;
+		width: 100%;
+	}
+
+	.draft-container div {
+		margin-top: var(--space-2xs);
+		display: flex;
+		flex-direction: row;
+		gap: 2rem;
+		align-items: center;
+		justify-content: center;
+		align-content: center;
+	}
+
+	.draft-container div svg {
+		position: relative;
+		top: 5px;
+	}
+
+	.draft-container div h1 {
+		margin: 0;
+		font-weight: 600;
+		line-height: var(--leading-tighter);
+		font-size: var(--font-size-2xl);
+	}
+
+	.draft-container p {
+		font-size: var(--font-size-base);
+		color: var(--color-gray-800);
+		line-height: var(--line-height-base);
+		width: 50ch;
+		max-width: 90%;
+		font-weight: 300;
+		margin: var(--space-m) auto;
+	}
+
+	@media (max-width: 640px) {
+		.draft-container {
+			margin: var(--space-m) var(--space-3xs);
+		}
+
+		.draft-container div {
+			flex-direction: column;
+		}
+
+		.draft-container div svg {
+			display: none;
+		}
+	}
+</style>

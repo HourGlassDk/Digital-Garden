@@ -1,0 +1,160 @@
+---
+import { getCollection, render } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import Title1 from "../components/mdx/typography/Title1.astro";
+import Title2 from "../components/mdx/typography/Title2.astro";
+import Title3 from "../components/mdx/typography/Title3.astro";
+import Title4 from "../components/mdx/typography/Title4.astro";
+import TooltipLink from "../components/mdx/TooltipLink.astro";
+import BasicImage from "../components/mdx/BasicImage.astro";
+import InternalTooltipLink from "../components/mdx/InternalTooltipLink.astro";
+import PageWrapper from "../components/layouts/PageWrapper.astro";
+import NowSection from "../components/layouts/NowSection.astro";
+import Footnote from "../components/mdx/Footnote.astro";
+import ResourceBook from "../components/mdx/ResourceBook.astro";
+import { Icon } from "astro-icon/components";
+
+// Get all now entries and sort by date
+const nowEntries = await getCollection("now", ({ data }) => {
+	return data.draft !== true;
+});
+
+const sortedPosts = nowEntries.sort(
+	(a, b) => new Date(b.data.startDate).getTime() - new Date(a.data.startDate).getTime(),
+);
+
+// Pre-render all entries
+const renderedPosts = await Promise.all(
+	sortedPosts.map(async (post) => {
+		const { Content } = await render(post);
+		return { Content, post };
+	}),
+);
+
+const components = {
+	h1: Title1,
+	h2: Title2,
+	h3: Title3,
+	h4: Title4,
+	a: TooltipLink,
+	img: BasicImage,
+	InternalTooltipLink,
+	Footnote,
+	ResourceBook,
+	BasicImage,
+};
+---
+
+<Layout title="Now | Karl August Krogh Nybo">
+	<PageWrapper>
+		<header class="header">
+			<div class="back-link" slot="header-right">
+				<a href="/garden">
+					<Icon name="heroicons:arrow-left" size={16} />
+					<span> Back to Garden </span>
+				</a>
+			</div>
+			<Title1>Now</Title1>
+			<Title2>
+				A sporadically updated log of what I'm reading, exploring, and thinking about
+			</Title2>
+		</header>
+		<main>
+			{
+				renderedPosts.map(({ Content, post }) => (
+					<NowSection>
+						<h3>
+							<a href={`/now-${post.id}`} class="post-title-link">
+								{post.data.title}
+							</a>
+						</h3>
+						<Content components={components} />
+					</NowSection>
+				))
+			}
+		</main>
+	</PageWrapper>
+</Layout>
+
+<style>
+	.header {
+		margin: var(--space-xl) auto;
+		max-width: 800px;
+	}
+
+	main {
+		margin: 6rem auto var(--space-2xl);
+		max-width: 800px;
+	}
+
+	.post-title-link {
+		text-decoration: none;
+		color: inherit;
+		transition: color 0.2s ease;
+	}
+
+	@media (max-width: 768px) {
+		.header {
+			margin: var(--space-s) 0;
+			max-width: 100%;
+		}
+		main {
+			max-width: 100%;
+		}
+	}
+
+	.back-link {
+		display: inline-flex;
+		align-items: center;
+		height: 100%;
+		margin-bottom: var(--space-s);
+	}
+
+	@media (max-width: 1440px) {
+		.back-link {
+			display: inline-flex;
+			top: 0;
+			margin: 0;
+			left: 1rem;
+		}
+	}
+
+	.back-link a {
+		display: inline-flex;
+		align-items: center;
+		position: relative;
+		font-family: var(--font-sans);
+		font-size: var(--font-size-xs);
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		font-weight: bold;
+		transition: all 0.8s cubic-bezier(0.2, 1, 0.8, 1);
+		margin: 0;
+		padding: 0;
+	}
+
+	.back-link svg {
+		width: 0;
+		transition: all 0.8s cubic-bezier(0.2, 1, 0.8, 1);
+		color: var(--color-gray-300);
+		position: relative;
+		top: 1px;
+	}
+
+	.back-link span {
+		display: inline-block;
+		transition: transform 0.3s cubic-bezier(0.2, 1, 0.8, 1);
+		color: var(--color-gray-600);
+	}
+
+	.back-link a:hover svg {
+		width: 16px;
+		margin-right: 2px;
+		color: var(--color-primary-green);
+	}
+
+	.back-link a:hover span {
+		transform: translate3d(3px, 0, 0);
+		color: var(--color-primary-green);
+	}
+</style>

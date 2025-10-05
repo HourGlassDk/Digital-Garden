@@ -1,0 +1,103 @@
+---
+const { slug, cover, title, date, topics } = Astro.props;
+import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
+
+function formattedDate(date: Date) {
+	return new Date(date).toLocaleDateString("en-GB", {
+		year: "numeric",
+		month: "long",
+	});
+}
+---
+
+<a href={`/${slug}`}>
+	<div class="project-card">
+		<div class="image-wrapper">
+			<Image src={cover} alt={title} width={300} height={225} />
+		</div>
+		<div class="metadata">
+			<h3>{title}</h3>
+			<div class="metadata-container">
+				<span>{formattedDate(date)}</span>
+				<Icon name="evergreen" width="14" height="14" />
+				<span>{topics}</span>
+			</div>
+		</div>
+	</div>
+</a>
+
+<style>
+	.image-wrapper {
+		display: grid;
+		place-content: center;
+		max-width: 450px;
+		max-height: 338px;
+	}
+
+	.metadata {
+		display: flex;
+		flex-direction: column;
+		margin-top: var(--space-2xs);
+	}
+
+	.metadata h3 {
+		text-align: center;
+		transition: all 0.3s ease-in-out;
+		font-family: var(--font-body);
+		font-size: var(--font-size-base);
+		font-weight: 400;
+		line-height: var(--leading-snug);
+		margin-bottom: var(--space-3xs);
+	}
+
+	.metadata-container {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.metadata-container span {
+		display: inline-block;
+		font-family: var(--font-sans);
+		font-size: calc(var(--font-size-xs) / 1.08);
+		color: var(--color-gray-600);
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		font-weight: 400;
+		margin-top: 2px;
+	}
+
+	.metadata-container svg {
+		margin: 0 var(--space-3xs);
+	}
+
+	.project-card {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		background: var(--color-cream);
+		transition: all 0.3s ease-in-out;
+		color: var(--color-gray-800);
+		margin: 0 var(--space-xs) var(--space-xs) 0;
+	}
+
+	.project-card img,
+	.project-card div:first-child {
+		border-radius: var(--border-radius-base);
+		transition: all 0.3s ease-in-out;
+		margin-bottom: 0 !important;
+	}
+
+	.project-card:hover {
+		transform: scale3d(1.02, 1.02, 1.02);
+	}
+
+	.project-card:hover h3 {
+		color: var(--color-accent-brown);
+	}
+
+	.project-card:hover > div:first-child {
+		box-shadow: var(--box-shadow-lg);
+	}
+</style>

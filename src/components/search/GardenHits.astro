@@ -1,0 +1,224 @@
+---
+import MasonryGrid from "../layouts/MasonryGrid.astro";
+import EssayCard from "../cards/EssayCard.astro";
+import NoteCard from "../cards/NoteCard.astro";
+// import PatternCard from "../cards/PatternCard.astro";
+// import PodcastCard from "../cards/PodcastCard.astro";
+// import TalkCard from "../cards/TalkCard.astro";
+import SmidgeonCard from "../cards/SmidgeonCard.astro";
+import NowCard from "../cards/NowCard.astro";
+import { extractPreview } from "../../utils/extractPreview";
+import { extractBaseSlug } from "../../utils/versionUtils";
+
+interface Post {
+	id: string;
+	collection: string;
+	body?: string;
+	render?: () => Promise<{ body: string }>;
+	preview?: string;
+	data: {
+		type?: string;
+		updated?: string;
+		startDate: string;
+		title?: string;
+		description?: string;
+		growthStage?: string;
+		topics?: string[];
+		cover?: string;
+		podcastName?: string;
+		episodeName?: string;
+		url?: string;
+		conferences?: string[];
+		coverImage?: {
+			src: string;
+			width: number;
+			height: number;
+			format: string;
+		};
+		external?: {
+			url: string;
+			title: string;
+			author?: string;
+		};
+		citation?: {
+			title: string;
+			authors: string[];
+			journal: string;
+			year: number;
+			url?: string;
+		};
+	};
+}
+
+const { allPostData } = Astro.props;
+
+// No need to process again - Now posts already have preview extracted in garden.astro
+const processedPosts = allPostData;
+
+const sortedPosts = processedPosts.sort((a: Post, b: Post) => {
+	const dateA = new Date(a.data.updated || a.data.startDate).getTime();
+	const dateB = new Date(b.data.updated || b.data.startDate).getTime();
+	return dateB - dateA;
+});
+---
+
+<div id="hits-container">
+	<MasonryGrid>
+		{
+			sortedPosts.map((post: Post, i: number) => {
+				const isPodcast = post.data.type === "podcast" || post.collection === "podcasts";
+
+				if (!post) return null;
+
+				// Use the correct date field for each content type
+				const dateField =
+					isPodcast || post.collection === "podcasts" ? post.data.updated : post.data.startDate;
+
+				const commonProps = {
+					key: i,
+					id: post.id,
+					slug: post.data.type === "now" ? `now-${post.id}` : extractBaseSlug(post.id),
+					date: dateField,
+				};
+
+				return (
+					<div
+						class="grid-item"
+						data-type={post.data.type}
+						data-growth-stage={post.data.growthStage}
+						data-topics={post.data.topics?.join(",")}
+					>
+						{/* {isPodcast && (
+							<PodcastCard
+								{...commonProps}
+								podcastName={post.data.podcastName}
+								episodeName={post.data.episodeName}
+								url={post.data.url}
+								podcastCover={post.data.coverImage}
+							/>
+						)} */}
+						{post.data.type === "essay" && (
+							<EssayCard
+								{...commonProps}
+								cover={post.data.cover}
+								title={post.data.title}
+								growthStage={post.data.growthStage}
+								description={post.data.description}
+							/>
+						)}
+						{post.data.type === "note" && (
+							<NoteCard
+								{...commonProps}
+								title={post.data.title}
+								growthStage={post.data.growthStage}
+								description={post.data.description}
+							/>
+						)}
+						{/* {post.data.type === "pattern" && (
+							<PatternCard
+								{...commonProps}
+								title={post.data.title}
+								growthStage={post.data.growthStage}
+								description={post.data.description}
+							/>
+						)} */}
+						{/* {post.data.type === "talk" && (
+							<TalkCard
+								{...commonProps}
+								title={post.data.title}
+								description={post.data.description}
+								cover={post.data.cover}
+								conferences={post.data.conferences}
+							/>
+						)} */}
+						{post.data.type === "now" && (
+							<NowCard {...commonProps} title={post.data.title} preview={post.preview} />
+						)}
+						{post.data.type === "smidgeon" && post.data.title && (
+							<SmidgeonCard
+								{...commonProps}
+								title={post.data.title}
+								preview={post.preview}
+								external={post.data.external}
+								citation={post.data.citation}
+							/>
+						)}
+					</div>
+				);
+			})
+		}
+	</MasonryGrid>
+</div>
+
+<style>
+	#hits-container {
+		width: 100%;
+		margin: 0 auto;
+	}
+
+	.grid-item {
+		transition: all 0.3s ease-out;
+		transform-origin: center;
+		will-change: opacity;
+		break-inside: avoid;
+		page-break-inside: avoid;
+	}
+
+	.grid-item.filtered-out {
+		width: 0;
+		height: 0;
+		margin: 0;
+		padding: 0;
+		opacity: 0;
+		pointer-events: none;
+		position: absolute;
+	}
+</style>
+
+<script>
+	// Function to filter grid items
+	function filterGridItems(topic: string, growthStage: string, type: string) {
+		console.time("filter-operation");
+		const items = document.querySelectorAll<HTMLElement>(".grid-item");
+
+		items.forEach((htmlItem) => {
+			const itemTopics = htmlItem.dataset.topics?.split(",") || [];
+			const itemType = htmlItem.dataset.type;
+			const itemGrowthStage = htmlItem.dataset.growthStage;
+
+			const matchesTopic = !topic || itemTopics.includes(topic);
+			const matchesGrowthStage = !growthStage || itemGrowthStage === growthStage;
+			const matchesType =
+				!type || itemType === type || (type === "podcast" && itemType === undefined);
+
+			const isVisible = matchesTopic && matchesGrowthStage && matchesType;
+			htmlItem.classList.toggle("filtered-out", !isVisible);
+		});
+
+		console.timeEnd("filter-operation");
+	}
+
+	// Listen for filter changes with debounce
+	let filterTimeout: number;
+	
+	function handleFilterChange(event: Event) {
+		const customEvent = event as CustomEvent;
+		clearTimeout(filterTimeout);
+		filterTimeout = setTimeout(() => {
+			const { topic, growthStage, type } = customEvent.detail;
+			filterGridItems(topic, growthStage, type);
+		}, 50) as unknown as number;
+	}
+
+	function init() {
+		// Remove existing listener to prevent duplicates
+		document.removeEventListener("filter-change", handleFilterChange);
+		document.addEventListener("filter-change", handleFilterChange);
+	}
+
+	// Initialize on first load
+	init();
+
+	// Re-initialize after page navigation
+	document.addEventListener("astro:page-load", init);
+</script>

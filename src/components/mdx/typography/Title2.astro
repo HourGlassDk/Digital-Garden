@@ -1,0 +1,29 @@
+---
+const { id } = Astro.props;
+---
+
+<h2 class="title2" id={id}><slot /></h2>
+
+<style>
+	.title2 {
+		font-size: calc(var(--font-size-xl) / 1.2);
+		font-family: var(--font-serif);
+		color: var(--color-gray-800);
+		font-weight: 100;
+		line-height: var(--leading-base);
+		margin: var(--space-xs) 0 var(--space-2xs);
+		transition: all 0.3s ease-in-out;
+	}
+
+	@media screen and (max-width: 768px) {
+		.title2 {
+			font-size: var(--font-size-lg);
+		}
+	}
+
+	@media screen and (max-width: 550px) {
+		.title2 {
+			font-size: var(--font-size-md);
+		}
+	}
+</style>

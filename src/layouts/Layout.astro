@@ -1,0 +1,127 @@
+---
+import Footer from "../components/layouts/Footer.astro";
+import Navbar from "../components/layouts/navbar/Navbar.astro";
+import { SEO } from "astro-seo";
+import { ClientRouter } from "astro:transitions";
+import "../global.css";
+
+export interface Props {
+	title?: string;
+	desc?: string;
+	type?: string;
+	coverImage?: string;
+	canonicalURL?: string;
+}
+
+const { title, desc, type, coverImage, canonicalURL: overrideCanonicalURL } = Astro.props;
+
+const canonicalURL = overrideCanonicalURL || new URL(Astro.url.pathname, Astro.site).toString();
+
+// Generate OG image URL based on canonical path so all versions share the same image
+const canonicalPathname = new URL(canonicalURL).pathname;
+const contentId = canonicalPathname.replace(/^\/?|\/?$/g, "");
+
+// Use localhost URL in development, production URL otherwise
+const baseUrl = import.meta.env.DEV ? "http://localhost:4321" : Astro.site;
+
+// Construct OG image URL - now just using the content ID directly
+const ogImageURL = type ? new URL(`/og/${contentId}.png`, baseUrl) : new URL(`/og.png`, baseUrl);
+
+// Only add search params for non-content pages (like the homepage)
+if (!type) {
+	if (title) ogImageURL.searchParams.set("title", title);
+	if (desc) ogImageURL.searchParams.set("description", desc);
+	if (coverImage) ogImageURL.searchParams.set("coverImage", coverImage);
+}
+
+// Google Analytics type declarations
+declare global {
+	interface Window {
+		dataLayer: any[];
+		gtag: (...args: any[]) => void;
+	}
+}
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="google-site-verification" content="YOUR_GOOGLE_VERIFICATION_CODE" />
+		<link rel="apple-touch-icon" sizes="180x180" href="/images/favicon/apple-touch-icon.png" />
+		<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon/favicon-32x32.png" />
+		<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon/favicon-16x16.png" />
+		<link rel="manifest" href="/manifest.json" />
+		<link
+			rel="alternate"
+			type="application/rss+xml"
+			title="Karl August's RSS Feed"
+			href="/rss.xml"
+		/>
+		<link rel="webmention" href="https://webmention.io/karlaugust.dev/webmention" />
+
+		<link rel="pingback" href="https://webmention.io/karlaugust.dev/xmlrpc" />
+		<link rel="me" href="https://bsky.app/profile/karlaugust.bsky.social" />
+		<link rel="canonical" href={canonicalURL} />
+		<ClientRouter />
+		<script
+			type="text/partytown"
+			async
+			src="https://www.googletagmanager.com/gtag/js?id=YOUR_GA_ID"></script>
+		<script type="text/partytown">
+			window.dataLayer = window.dataLayer || [];
+			function gtag() {
+				dataLayer.push(arguments);
+			}
+			gtag("js", new Date());
+			gtag("config", "YOUR_GA_ID");
+		</script>
+		<SEO
+			title={title}
+			description={desc ||
+				"Karl August's digital garden exploring ML, AI safety, music, design, and mathematics"}
+			canonical={canonicalURL}
+			openGraph={{
+				basic: {
+					type: "website",
+					url: canonicalURL,
+					title: title || "Karl August Krogh Nybo",
+					image: ogImageURL.toString(),
+				},
+				optional: {
+					locale: "en_GB",
+					description:
+						desc ||
+						"Karl August's digital garden exploring ML, AI safety, music, design, and mathematics",
+				},
+				image: {
+					alt: title || "Karl August's digital garden",
+					width: 1200,
+					height: 630,
+				},
+			}}
+			twitter={{
+				creator: "@karlaugust",
+				card: "summary_large_image",
+				image: ogImageURL.toString(),
+				imageAlt: title || "Karl August's digital garden",
+			}}
+		/>
+	</head>
+	<body>
+		<Navbar />
+		<main>
+			<slot />
+		</main>
+		<Footer />
+		<style is:global>
+			/* Improve Page speed */
+			/* https://css-tricks.com/almanac/properties/c/content-visibility/ */
+			img {
+				content-visibility: auto;
+			}
+		</style>
+		<script async src="https://platform.twitter.com/widgets.js"></script>
+	</body>
+</html>

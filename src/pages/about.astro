@@ -1,0 +1,298 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Title1 from "../components/mdx/typography/Title1.astro";
+import Title2 from "../components/mdx/typography/Title2.astro";
+import SmallCaps from "../components/mdx/typography/SmallCaps.astro";
+import UnderlineHoverLink from "../components/mdx/UnderlineHoverLink.astro";
+import PageWrapper from "../components/layouts/PageWrapper.astro";
+// Image imports will be added when Karl provides photos
+---
+
+<!-- Photo randomization script will be added when photos are available -->
+
+<Layout title="About Karl August" desc="ML student interested in AI safety, music, design, and mathematics.">
+	<PageWrapper>
+		<div class="header-section">
+			<SmallCaps>About</SmallCaps>
+			<Title1>Karl August Krogh Nybo</Title1>
+			<Title2>ML student interested in AI safety, music, design, and mathematics.</Title2>
+		</div>
+		<div class="styled-main">
+			<section class="intro">
+				<div>
+					<SmallCaps>A Little Context</SmallCaps>
+					<p>
+						I sit at the intersection of machine learning, AI safety, and creative expression. These three are
+						at the core of everything I explore. I'm fascinated by how we can build safer AI systems while
+						nurturing our creative instincts through music, film, and design.
+					</p>
+					<p>
+						As an ML student, I'm particularly drawn to AI safety research and the ethical implications of
+						artificial intelligence. But I don't just think about algorithms - I express myself through music
+						production, occasional short filmmaking, and design experimentation.
+					</p>
+					<p>
+						Here's what I'm currently exploring:
+					</p>
+					<div class="timeline">
+						<div class="timeline-item">
+							<div class="timeline-marker"></div>
+							<div class="timeline-content">
+								<div class="timeline-role-company">
+									ML Student & AI Safety Researcher
+								</div>
+								<div class="timeline-year">2023 - Present</div>
+								<div class="timeline-description">
+									Studying machine learning with a focus on AI safety research. Exploring how we can
+									build more robust and aligned AI systems that benefit humanity.
+								</div>
+							</div>
+						</div>
+
+						<div class="timeline-item">
+							<div class="timeline-marker"></div>
+							<div class="timeline-content">
+								<div class="timeline-role-company">
+									Music Producer & Sound Designer
+								</div>
+								<div class="timeline-year">2020 - Present</div>
+								<div class="timeline-description">
+									Creating experimental electronic music and soundscapes. Occasionally producing
+									short films that blend visual storytelling with original compositions.
+								</div>
+							</div>
+						</div>
+
+						<div class="timeline-item">
+							<div class="timeline-marker"></div>
+							<div class="timeline-content">
+								<div class="timeline-role-company">
+									Design Enthusiast & Creative Coder
+								</div>
+								<div class="timeline-year">2019 - Present</div>
+								<div class="timeline-description">
+									Exploring the intersection of design and technology through creative coding projects.
+									Love fiddling with interactive visualizations and generative art.
+								</div>
+							</div>
+						</div>
+
+						<div class="timeline-item">
+							<div class="timeline-marker"></div>
+							<div class="timeline-content">
+								<div class="timeline-role-company">
+									Mathematics Explorer
+								</div>
+								<div class="timeline-year">2018 - Present</div>
+								<div class="timeline-description">
+									Dabbling in mathematical concepts and their applications to machine learning and
+									computational creativity. Always seeking elegant solutions to complex problems.
+								</div>
+							</div>
+						</div>
+					</div>
+					<p>
+						This digital garden serves as my space to explore ideas at the intersection of technology,
+						creativity, and ethics. I'm particularly interested in{" "}
+						<UnderlineHoverLink href="/essays">AI alignment</UnderlineHoverLink>,{" "}
+						<UnderlineHoverLink href="/garden-history">digital gardening</UnderlineHoverLink> as a
+						method for knowledge cultivation, and{" "}
+						<UnderlineHoverLink href="https://en.wikipedia.org/wiki/Computational_creativity">
+							computational creativity</UnderlineHoverLink>.
+					</p>
+					<SmallCaps>A Little History</SmallCaps>
+					<p>
+						I've always been fascinated by both the analytical and creative aspects of life. Growing up,
+						I found equal joy in solving mathematical problems and creating music on my computer.
+					</p>
+					<p>
+						This dual interest led me to explore machine learning, where I discovered the perfect blend
+						of mathematical rigor and creative problem-solving. As I delved deeper into the field, I
+						became increasingly concerned with the ethical implications of AI systems, which sparked my
+						interest in AI safety research.
+					</p>
+					<p>
+						Alongside my technical pursuits, I've continued to nurture my creative side through music
+						production and occasional filmmaking. I believe that maintaining this creative outlet is
+						essential for staying grounded and bringing fresh perspectives to technical challenges.
+					</p>
+					<p>
+						Currently, I'm based in Copenhagen, balancing my studies in machine learning with creative
+						projects and explorations in design and mathematics.
+					</p>
+				</div>
+				{
+					/* Placeholder for future photo of Karl August */
+				}
+			</section>
+		</div>
+	</PageWrapper>
+</Layout>
+
+<style>
+	.header-section {
+		margin: var(--space-m) auto 0;
+	}
+	.header-section :global(.small-caps) {
+		margin-bottom: var(--space-3xs);
+		color: var(--color-gray-600);
+	}
+	.header-section h1 {
+		margin-bottom: var(--space-s);
+	}
+	.header-section h2 {
+		color: var(--color-gray-800);
+	}
+
+	.styled-main {
+		margin-top: var(--space-xs);
+		padding: var(--space-xl) 0;
+		width: 100%;
+	}
+
+	@media (max-width: 768px) {
+		.styled-main {
+			padding: var(--space-l) var(--space-xs);
+		}
+	}
+
+	.styled-main img {
+		border-radius: 4px;
+	}
+
+	.styled-main h2 {
+		margin-bottom: var(--space-s);
+	}
+
+	.styled-main p {
+		line-height: var(--leading-loose);
+		max-width: 52ch;
+	}
+
+	.styled-main p:not(:last-of-type) {
+		margin-bottom: var(--space-s);
+	}
+
+	.intro {
+		display: grid;
+		grid-template-columns: 4fr 3fr;
+		gap: var(--space-xl);
+		align-items: flex-start;
+	}
+
+	.intro :global(.small-caps):not(:first-of-type) {
+		margin-top: var(--space-xl);
+		color: var(--color-gray-900);
+	}
+
+	.intro :global(.small-caps)::before {
+		content: "";
+		display: inline-block;
+		width: 20px;
+		clear: both;
+		height: 20px;
+		margin-right: -1.5rem;
+		background-image: url("/images/leaf-icon.svg");
+		background-size: contain;
+		background-repeat: no-repeat;
+		position: relative;
+		top: 4px;
+		right: 2.25rem;
+	}
+
+	@media (max-width: 768px) {
+		.intro {
+			grid-template-columns: 1fr;
+			gap: var(--space-m);
+			flex-direction: column;
+		}
+	}
+
+	.intro :global(.small-caps) {
+		margin-bottom: 1.5rem;
+	}
+
+	/* Timeline Styles */
+	.timeline {
+		position: relative;
+		max-width: 64ch;
+		margin: var(--space-l) 0 var(--space-xl) 0;
+		font-family: var(--font-sans);
+	}
+
+	/* Timeline line */
+	.timeline::before {
+		content: "";
+		position: absolute;
+		left: 8px;
+		top: 18px;
+		bottom: -90px;
+		width: 2px;
+		background: linear-gradient(to bottom, var(--color-gray-300) 75%, var(--color-cream) 90%);
+	}
+
+	.timeline-item {
+		position: relative;
+		margin-bottom: var(--space-l);
+		padding-left: 2.5rem;
+	}
+
+	.timeline-item:last-child {
+		margin-bottom: 0;
+	}
+
+	.timeline-marker {
+		position: absolute;
+		left: 0;
+		top: 12px;
+		width: 16px;
+		height: 16px;
+		background: var(--color-cream);
+		border: 2px solid var(--color-gray-400);
+		border-radius: 50%;
+		z-index: 1;
+	}
+
+	.timeline-year {
+		font-weight: 500;
+		color: var(--color-gray-600);
+		margin-bottom: 0.5rem;
+		text-transform: uppercase;
+		letter-spacing: 0.025em;
+	}
+
+	.timeline-role-company {
+		font-family: var(--font-body);
+		font-size: var(--font-size-base);
+		font-weight: 500;
+		color: var(--color-gray-900);
+		margin-bottom: var(--space-2xs);
+		line-height: var(--leading-normal);
+	}
+
+	.timeline-description {
+		color: var(--color-gray-700);
+		line-height: var(--leading-base);
+	}
+
+	@media (max-width: 768px) {
+		.timeline {
+			margin-left: var(--space-2xs);
+		}
+
+		.timeline::before {
+			top: 15px;
+			bottom: calc(var(--space-l) + 15px);
+		}
+
+		.timeline-item {
+			padding-left: var(--space-l);
+		}
+
+		.timeline-marker {
+			width: 20px;
+			height: 20px;
+			top: 10px;
+		}
+	}
+</style>

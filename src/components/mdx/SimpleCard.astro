@@ -1,0 +1,85 @@
+---
+const { alignLeft, subtle, padding, margin, ...props } = Astro.props;
+---
+
+{
+	subtle ? (
+		<div
+			class="subtle-card"
+			data-align-left={alignLeft}
+			style={{
+				padding: padding,
+				margin: margin,
+			}}
+			{...props}
+		>
+			<slot />
+		</div>
+	) : (
+		<div
+			class="styled-card"
+			data-align-left={alignLeft}
+			style={{
+				padding: padding,
+				margin: margin,
+			}}
+			{...props}
+		>
+			<slot />
+		</div>
+	)
+}
+
+<style>
+	.styled-card {
+		margin: var(--space-3xs) auto var(--space-m);
+		box-shadow: var(--box-shadow-lg);
+		border-radius: var(--border-radius-base);
+		border: 1px solid var(--color-tinted-cream);
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		padding: var(--space-m) var(--space-l);
+		grid-column: 1/4 !important;
+		max-width: 848px;
+		width: 100%;
+	}
+
+	.styled-card[data-align-left="true"] {
+		align-items: flex-start;
+		text-align: left;
+	}
+
+	.styled-card :global(h1),
+	.styled-card :global(h2),
+	.styled-card :global(h3),
+	.styled-card :global(h4),
+	.styled-card :global(h5),
+	.styled-card :global(p),
+	.styled-card :global(ol),
+	.styled-card :global(ul .tweet) {
+		margin: var(--space-2xs) 0;
+	}
+
+	/* Add global p tag styling */
+	:global(p) {
+		font-size: var(--font-size-base);
+		line-height: var(--leading-loose);
+		margin-bottom: var(--space-m);
+	}
+
+	.subtle-card {
+		margin: 0 auto var(--space-s);
+		box-shadow: var(--box-shadow-sm);
+		padding: var(--space-m) var(--space-l);
+		align-items: center;
+		text-align: center;
+	}
+
+	.subtle-card[data-align-left="true"] {
+		align-items: flex-start;
+		text-align: left;
+	}
+</style>

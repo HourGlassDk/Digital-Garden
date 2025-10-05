@@ -1,0 +1,137 @@
+---
+import PostLayout from "../layouts/PostLayout.astro";
+import SmidgeonLayout from "../layouts/SmidgeonLayout.astro";
+import ProseWrapper from "../components/layouts/ProseWrapper.astro";
+import { getCollection, type CollectionEntry } from "astro:content";
+import { render } from "astro:content";
+import { generateVersionedPaths } from "../utils/versionUtils";
+import TableOfContents from "../components/layouts/TableOfContents.astro";
+// Component imports
+import Title1 from "../components/mdx/typography/Title1.astro";
+import Title2 from "../components/mdx/typography/Title2.astro";
+import Title3 from "../components/mdx/typography/Title3.astro";
+import Title4 from "../components/mdx/typography/Title4.astro";
+import TooltipLink from "../components/mdx/TooltipLink.astro";
+import InternalTooltipLink from "../components/mdx/InternalTooltipLink.astro";
+import Footnote from "../components/mdx/Footnote.astro";
+import IntroParagraph from "../components/mdx/IntroParagraph.astro";
+import ResourceBook from "../components/mdx/ResourceBook.astro";
+import RemoteImage from "../components/mdx/RemoteImage.astro";
+import BasicImage from "../components/mdx/BasicImage.astro";
+import Spacer from "../components/mdx/Spacer.astro";
+
+type ContentType = "essay" | "note" | "pattern" | "talk" | "smidgeon";
+type Collections = "essays" | "notes" | "patterns" | "talks" | "smidgeons";
+
+// Add type definitions for different frontmatter types
+type BaseFrontmatter = {
+	title: string;
+	startDate: Date;
+	topics?: string[];
+};
+
+type SmidgeonFrontmatter = BaseFrontmatter & {
+	type: "smidgeon";
+};
+
+interface Props {
+	entry: CollectionEntry<Collections>;
+	type: ContentType;
+}
+
+// Get params from URL
+export async function getStaticPaths() {
+	const essays = await getCollection("essays");
+	const notes = await getCollection("notes");
+	// Temporarily disabled collections:
+	// const patterns = await getCollection("patterns");
+	// const talks = await getCollection("talks");
+	const patterns: any[] = []; // Empty array since collection is temporarily disabled
+	const talks: any[] = []; // Empty array since collection is temporarily disabled
+	const smidgeons = await getCollection("smidgeons");
+
+	// Generate versioned paths for content that supports versioning
+	const versionedEssayPaths = generateVersionedPaths(essays).map(({ slug, entry }) => ({
+		params: { slug },
+		props: { entry, type: "essay" } as const,
+	}));
+
+	const versionedNotePaths = generateVersionedPaths(notes).map(({ slug, entry }) => ({
+		params: { slug },
+		props: { entry, type: "note" } as const,
+	}));
+
+	const versionedPatternPaths = generateVersionedPaths(patterns).map(({ slug, entry }) => ({
+		params: { slug },
+		props: { entry, type: "pattern" } as const,
+	}));
+
+	const versionedTalkPaths = generateVersionedPaths(talks).map(({ slug, entry }) => ({
+		params: { slug },
+		props: { entry, type: "talk" } as const,
+	}));
+
+	return [
+		...versionedEssayPaths,
+		...versionedNotePaths,
+		...versionedPatternPaths,
+		...versionedTalkPaths,
+		// Smidgeons don't support versioning, so keep the original mapping
+		...smidgeons.map((entry) => ({
+			params: { slug: entry.id },
+			props: { entry, type: "smidgeon" } as const,
+		})),
+	];
+}
+
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+
+const components = {
+	h1: Title1,
+	h2: Title2,
+	h3: Title3,
+	h4: Title4,
+	a: TooltipLink,
+	img: BasicImage,
+	InternalTooltipLink,
+	IntroParagraph,
+	Footnote,
+	BasicImage,
+	ResourceBook,
+	RemoteImage,
+	Spacer,
+};
+
+// Type guard for checking if data has TOC
+function hasTOC(data: any): data is { toc: boolean } {
+	return "toc" in data;
+}
+
+// Type guard for checking if frontmatter is SmidgeonFrontmatter
+function isSmidgeonFrontmatter(data: any): data is SmidgeonFrontmatter {
+	return data.type === "smidgeon";
+}
+
+// Prepare frontmatter data based on type
+const frontmatter = entry.data;
+---
+
+{
+	isSmidgeonFrontmatter(frontmatter) ? (
+		<SmidgeonLayout frontmatter={frontmatter}>
+			<ProseWrapper>
+				<Content components={components} />
+			</ProseWrapper>
+		</SmidgeonLayout>
+	) : (
+		<PostLayout frontmatter={frontmatter} headings={headings} entry={entry}>
+			<ProseWrapper>
+				{headings.length > 0 && hasTOC(frontmatter) && frontmatter.toc && (
+					<TableOfContents headings={headings} />
+				)}
+				<Content components={components} />
+			</ProseWrapper>
+		</PostLayout>
+	)
+}

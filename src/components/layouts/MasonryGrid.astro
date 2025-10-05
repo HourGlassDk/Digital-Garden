@@ -1,0 +1,63 @@
+---
+const {
+	breakpointColumnsObj = {
+		default: 3,
+		1100: 2,
+		700: 1,
+	},
+	...props
+} = Astro.props;
+---
+
+<div class="grid" {...props}>
+	<slot />
+</div>
+
+<style>
+	.grid {
+		column-count: 3;
+		column-gap: 0.5rem;
+		width: 100%;
+		max-width: 1400px;
+		margin: var(--space-m) auto;
+		position: relative;
+	}
+
+	@media (max-width: 1100px) {
+		.grid {
+			column-count: 2;
+		}
+	}
+
+	@media (max-width: 700px) {
+		.grid {
+			column-count: 1;
+		}
+	}
+
+	:global(.grid-item) {
+		break-inside: avoid;
+		page-break-inside: avoid;
+		margin-bottom: 0.5rem;
+		display: inline-block;
+		width: 100%;
+		opacity: 1;
+		transform: scale(1);
+		transition:
+			opacity 0.3s ease-out,
+			transform 0.3s ease-out;
+		transform-origin: top center;
+	}
+
+	:global(.grid-item.filtered-out) {
+		opacity: 0;
+		transform: scale(0.8);
+		position: absolute;
+		pointer-events: none;
+		width: 0;
+		height: 0;
+		margin: 0;
+		padding: 0;
+		overflow: hidden;
+	}
+</style>

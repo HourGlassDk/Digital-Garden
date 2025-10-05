@@ -1,0 +1,521 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import { render } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import Title2 from "../components/mdx/typography/Title2.astro";
+import TitleWithCount from "../components/layouts/TitleWithCount.astro";
+import PageWrapper from "../components/layouts/PageWrapper.astro";
+import ProseWrapper from "../components/layouts/ProseWrapper.astro";
+import Topics from "../components/layouts/Topics.astro";
+import { Icon } from "astro-icon/components";
+// Import components used in MDX files
+import Title1 from "../components/mdx/typography/Title1.astro";
+import Title3 from "../components/mdx/typography/Title3.astro";
+import Title4 from "../components/mdx/typography/Title4.astro";
+import TooltipLink from "../components/mdx/TooltipLink.astro";
+import InternalTooltipLink from "../components/mdx/InternalTooltipLink.astro";
+import Footnote from "../components/mdx/Footnote.astro";
+import IntroParagraph from "../components/mdx/IntroParagraph.astro";
+import ResourceBook from "../components/mdx/ResourceBook.astro";
+import RemoteImage from "../components/mdx/RemoteImage.astro";
+import BasicImage from "../components/mdx/BasicImage.astro";
+import Spacer from "../components/mdx/Spacer.astro";
+
+const smidgeons = await getCollection("smidgeons", ({ data }) => !data.draft);
+
+// Sort by date in reverse chronological order
+const sortedSmidgeons = smidgeons.sort(
+	(a, b) => b.data.startDate.getTime() - a.data.startDate.getTime(),
+);
+
+// Define components for MDX rendering
+const components = {
+	h1: Title1,
+	h2: Title2,
+	h3: Title3,
+	h4: Title4,
+	a: TooltipLink,
+	img: BasicImage,
+	InternalTooltipLink,
+	IntroParagraph,
+	Footnote,
+	BasicImage,
+	ResourceBook,
+	RemoteImage,
+	Spacer,
+};
+
+// Render all smidgeons content
+const renderedSmidgeons = await Promise.all(
+	sortedSmidgeons.map(async (smidgeon: CollectionEntry<"smidgeons">) => {
+		const { Content } = await render(smidgeon);
+		return { ...smidgeon, Content };
+	}),
+);
+---
+
+<Layout title="Smidgeons Stream | Karl August Krogh Nybo">
+	<PageWrapper>
+		<header class="header">
+			<TitleWithCount posts={smidgeons}>
+				<div class="back-link" slot="header-right">
+					<a href="/garden">
+						<Icon name="heroicons:arrow-left" size={16} />
+						<span> Back to Garden </span>
+					</a>
+				</div>
+				Smidgeons Stream
+			</TitleWithCount>
+			<Title2>
+				A stream of interesting links, papers, and tiny thoughts. Roughly what I'm reading and
+				thinking about at the moment.</Title2
+			>
+		</header>
+
+		<div class="page-layout">
+			<div class="smidgeons-list">
+				{
+					renderedSmidgeons.map((smidgeon, index) => (
+						<>
+							<article class="smidgeon-preview" id={`smidgeon-${smidgeon.id}`}>
+								<div class="metadata">
+									<div class="date-permalink">
+										<a
+											href={`/${smidgeon.id}`}
+											class="permalink"
+											title="Permalink to this smidgeon"
+										>
+											<div class="permalink-button">
+												<Icon name="heroicons:link" size={16} />
+											</div>
+										</a>
+										<time datetime={smidgeon.data.startDate.toISOString()}>
+											{smidgeon.data.startDate.toLocaleDateString("en-US", {
+												year: "numeric",
+												month: "long",
+												day: "numeric",
+											})}
+										</time>
+									</div>
+									{smidgeon.data.topics && <Topics topics={smidgeon.data.topics} />}
+								</div>
+								<div class="content">
+									{/* External Link Format */}
+									{smidgeon.data.external && (
+										<a href={smidgeon.data.external.url} target="_blank" rel="noopener noreferrer">
+											<div class="reference-card">
+												<h1 class="content-header">
+													{smidgeon.data.external.title}
+													<Icon name="heroicons:arrow-top-right-on-square" size={16} />
+												</h1>
+												{smidgeon.data.external.author && (
+													<p class="byline">
+														<Icon name="heroicons:user" size={14} />
+														{smidgeon.data.external.author}
+													</p>
+												)}
+											</div>
+										</a>
+									)}
+
+									{/* Academic Paper Format */}
+									{smidgeon.data.citation && (
+										<a href={smidgeon.data.citation.url} target="_blank" rel="noopener noreferrer">
+											<div class="reference-card">
+												<div class="citation-header">
+													<h1 class="content-header">
+														{smidgeon.data.citation.title}{" "}
+														<Icon name="heroicons:arrow-top-right-on-square" size={16} />
+													</h1>
+													<div class="citation-metadata">
+														<p class="byline">
+															<Icon name="heroicons:users" size={14} />
+															{smidgeon.data.citation.authors.join(", ")}
+														</p>
+														<p class="journal-info byline">
+															<Icon name="heroicons:academic-cap" size={14} />
+															{smidgeon.data.citation.journal} ({smidgeon.data.citation.year})
+														</p>
+													</div>
+												</div>
+											</div>
+										</a>
+									)}
+
+									<ProseWrapper>
+										<smidgeon.Content components={components} />
+									</ProseWrapper>
+								</div>
+							</article>
+							{index !== renderedSmidgeons.length - 1 && (
+								<div class="smidgeon-divider">
+									<Icon name="budding" size={20} />
+									<Icon name="budding" size={20} />
+									<Icon name="budding" size={20} />
+								</div>
+							)}
+						</>
+					))
+				}
+			</div>
+			<aside class="sidebar">
+				<div class="recent-smidgeons">
+					<h3>Recent Smidgeons</h3>
+					<ul>
+						{
+							renderedSmidgeons.slice(0, 8).map((recentSmidgeon) => (
+								<li>
+									<a href={`#smidgeon-${recentSmidgeon.id}`}>
+										{recentSmidgeon.data.title.length > 40
+											? `${recentSmidgeon.data.title.slice(0, 40)}...`
+											: recentSmidgeon.data.title}
+									</a>
+								</li>
+							))
+						}
+					</ul>
+				</div>
+				<div class="rss-link">
+					<a href="/smidgeons.xml" title="RSS Feed for Smidgeons">
+						<Icon name="heroicons:rss" size={14} />
+						<span>Smidgeons RSS Feed</span>
+					</a>
+				</div>
+			</aside>
+		</div>
+	</PageWrapper>
+</Layout>
+
+<style>
+	/* Header */
+	.header {
+		margin: 0 auto var(--space-2xl);
+		width: 800px;
+	}
+
+	.back-link {
+		display: inline-flex;
+		align-items: center;
+		height: 100%;
+		position: relative;
+		left: -1rem;
+		bottom: 0.5rem;
+	}
+
+	@media (max-width: 1440px) {
+		.back-link {
+			display: inline-flex;
+			top: 0;
+			margin: 0;
+			left: 1rem;
+		}
+	}
+
+	.back-link a {
+		display: inline-flex;
+		align-items: center;
+		position: relative;
+		font-family: var(--font-sans);
+		font-size: var(--font-size-xs);
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		font-weight: bold;
+		transition: all 0.8s cubic-bezier(0.2, 1, 0.8, 1);
+		margin: 0;
+		padding: 0;
+	}
+
+	.back-link svg {
+		width: 0;
+		transition: all 0.8s cubic-bezier(0.2, 1, 0.8, 1);
+		color: var(--color-gray-300);
+		position: relative;
+		top: 1px;
+	}
+
+	.back-link span {
+		display: inline-block;
+		transition: transform 0.3s cubic-bezier(0.2, 1, 0.8, 1);
+		color: var(--color-gray-600);
+	}
+
+	.back-link a:hover svg {
+		width: 16px;
+		margin-right: 2px;
+		color: var(--color-primary-green);
+	}
+
+	.back-link a:hover span {
+		transform: translate3d(3px, 0, 0);
+		color: var(--color-primary-green);
+	}
+
+	/* Main Layout */
+	.page-layout {
+		position: relative;
+		margin: 0 auto;
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 800px minmax(0, 1fr);
+		gap: var(--space-xl);
+	}
+
+	/* Smidgeons List */
+	.smidgeons-list {
+		position: relative;
+		grid-column: 2;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-2xl);
+	}
+
+	/* Smidgeon Preview */
+	.smidgeon-preview {
+		position: relative;
+		width: 100%;
+	}
+
+	/* Metadata */
+	.metadata {
+		position: absolute;
+		right: calc(100% + var(--space-m));
+		top: 0;
+		width: 200px;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-xs);
+		margin-top: var(--space-2xs);
+	}
+
+	.metadata :global(.styled-list) {
+		margin: 0;
+	}
+
+	.date-permalink {
+		display: flex;
+		align-items: center;
+		gap: var(--space-2xs);
+	}
+
+	time {
+		font-size: var(--font-size-sm);
+		color: var(--color-gray-600);
+		font-family: var(--font-sans);
+	}
+
+	.permalink {
+		color: var(--color-gray-600);
+		transition: all 0.2s ease;
+	}
+
+	.permalink:hover {
+		color: var(--color-black);
+	}
+
+	.permalink-button {
+		width: 24px;
+		height: 24px;
+		border-radius: 0.25rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.permalink-button:hover {
+		background-color: var(--color-gray-100);
+		transition: all 0.2s ease;
+		cursor: pointer;
+	}
+
+	/* Content */
+	.content {
+		width: 100%;
+		position: relative;
+		border-bottom: 1px solid var(--color-gray-300);
+		font-family: var(--font-serif);
+		font-size: var(--font-size-base);
+		line-height: 1.6;
+		color: var(--color-gray-800);
+	}
+
+	.content:last-child {
+		border-bottom: none;
+	}
+
+	.content :global(.prose-wrapper > p) {
+		margin-bottom: var(--space-xs);
+		padding: 0;
+	}
+
+	/* Reference Card */
+	.reference-card {
+		padding: 1.25rem 1.5rem;
+		border-radius: 0.5rem;
+		border: 1px solid var(--color-gray-300);
+		width: 100%;
+		box-shadow: var(--box-shadow-sm);
+		margin-bottom: var(--space-s);
+	}
+
+	.reference-card:hover {
+		background-color: white;
+		transition: all 0.4s ease;
+		cursor: pointer;
+	}
+
+	.content-header {
+		font-family: var(--font-body);
+		font-size: var(--font-size-base);
+		font-weight: 400;
+		line-height: var(--leading-base);
+		margin: 0;
+		margin-bottom: var(--space-2xs);
+		padding: 0;
+		display: flex;
+		align-items: flex-start;
+		gap: var(--space-2xs);
+	}
+
+	.content-header svg,
+	.byline svg {
+		flex-shrink: 0;
+		position: relative;
+		top: 7px;
+	}
+
+	.byline {
+		display: flex;
+		align-items: flex-start;
+		gap: var(--space-2xs);
+		font-family: var(--font-sans);
+		font-size: var(--font-size-sm);
+		color: var(--color-gray-600);
+		font-weight: 400;
+	}
+
+	/* Divider */
+	.smidgeon-divider {
+		display: flex;
+		justify-content: center;
+		color: var(--color-primary-green);
+		gap: 4px;
+		margin-bottom: var(--space-xs);
+	}
+
+	/* Sidebar */
+	.sidebar {
+		position: sticky;
+		top: var(--space-l);
+		height: fit-content;
+		width: 280px;
+		grid-column: 3;
+	}
+
+	.recent-smidgeons {
+		padding: 0 var(--space-xs);
+	}
+
+	.recent-smidgeons h3 {
+		font-family: var(--font-sans);
+		font-size: var(--font-size-xs);
+		font-weight: 400;
+		color: var(--color-secondary-green);
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		margin-top: 0;
+		margin-bottom: var(--space-2xs);
+	}
+
+	.recent-smidgeons ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	.recent-smidgeons li {
+		margin-bottom: 0.5rem;
+		line-height: 1.2;
+	}
+
+	.recent-smidgeons a {
+		color: var(--color-gray-600);
+		text-decoration: none;
+		font-family: var(--font-sans);
+		font-size: var(--font-size-sm);
+	}
+
+	.recent-smidgeons a:hover {
+		color: var(--color-secondary-green);
+	}
+
+	/* RSS Link */
+	.rss-link {
+		padding: 0 var(--space-xs);
+		margin-top: var(--space-m);
+	}
+
+	.rss-link a {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-3xs);
+		padding: var(--space-3xs) 1.2rem;
+		background: none;
+		border: 1px solid var(--color-tinted-cream);
+		border-radius: 3rem;
+		font-family: var(--font-sans);
+		font-size: var(--font-size-sm);
+		font-weight: 400;
+		color: var(--color-gray-600);
+		transition: all 0.3s ease-in-out;
+	}
+
+	.rss-link a:hover {
+		color: var(--color-accent-brown);
+		border: 1px solid var(--color-accent-brown);
+		box-shadow: var(--box-shadow-sm);
+		cursor: pointer;
+	}
+
+	@media (max-width: 1400px) {
+		.sidebar {
+			display: none;
+		}
+	}
+
+	@media (max-width: 1200px) {
+		.metadata {
+			flex-direction: row;
+			flex-wrap: wrap;
+			align-items: center;
+		}
+
+		.page-layout {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.header,
+		.smidgeons-list {
+			width: 100%;
+			max-width: 800px;
+			margin: 0 auto var(--space-2xl);
+		}
+
+		.metadata {
+			position: relative;
+			right: auto;
+			width: 100%;
+			flex-direction: row;
+			flex-wrap: wrap;
+			align-items: center;
+			margin-bottom: var(--space-s);
+		}
+	}
+
+	@media (max-width: 768px) {
+		.content :global(.prose-wrapper > p) {
+			padding: 0;
+		}
+	}
+</style>

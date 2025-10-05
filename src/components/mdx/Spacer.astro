@@ -1,0 +1,26 @@
+---
+interface Props {
+	size?: "2xs" | "xs" | "small" | "large";
+}
+
+const { size } = Astro.props;
+
+const height =
+	size === "2xs"
+		? "var(--space-xs)"
+		: size === "xs"
+			? "var(--space-m)"
+			: size === "small"
+				? "var(--space-l)"
+				: size === "large"
+					? "var(--space-3xl)"
+					: "var(--space-2xl)";
+---
+
+<div style={`height: ${height}`}></div>
+
+<style>
+	div {
+		display: block;
+	}
+</style>

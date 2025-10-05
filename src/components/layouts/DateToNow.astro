@@ -1,0 +1,32 @@
+---
+import { formatDistanceToNow, parse } from "date-fns";
+
+interface Props {
+	postDate: string;
+}
+
+const { postDate } = Astro.props;
+
+let dateToNow = null;
+
+if (postDate) {
+	try {
+		if (typeof postDate === "string" && /^\d{4}-\d{2}-\d{2}$/.test(postDate)) {
+			const date = parse(postDate, "yyyy-MM-dd", new Date());
+
+			if (!isNaN(date.getTime())) {
+				dateToNow = formatDistanceToNow(date, { addSuffix: true });
+			} else {
+				dateToNow = "Invalid date";
+			}
+		} else {
+			dateToNow = "Invalid date";
+		}
+	} catch (error) {
+		console.error("Date parsing error:", error);
+		dateToNow = "Invalid date";
+	}
+}
+---
+
+{dateToNow}

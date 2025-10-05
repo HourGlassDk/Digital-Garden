@@ -1,0 +1,31 @@
+---
+import { Icon } from "astro-icon/components";
+
+const { number, title } = Astro.props;
+---
+
+<div class="list-container">
+	{number === "1" && <Icon name="number-one" size={38} class="number-icon" />}
+	{number === "2" && <Icon name="number-two" size={38} class="number-icon" />}
+	{number === "3" && <Icon name="number-three" size={38} class="number-icon" />}
+	<h3 class="title">{title}</h3>
+	<slot />
+</div>
+
+<style>
+	.list-container {
+		display: inline-block;
+	}
+
+	.number-icon {
+		float: left;
+		display: inline-block;
+		margin-right: 1rem;
+		top: 0.7rem;
+		position: relative;
+	}
+
+	.title {
+		margin: 0.25rem 0 0.5rem;
+	}
+</style>

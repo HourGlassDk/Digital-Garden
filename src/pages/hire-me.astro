@@ -1,0 +1,61 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Title1 from "../components/mdx/typography/Title1.astro";
+import Title2 from "../components/mdx/typography/Title2.astro";
+import Title3 from "../components/mdx/typography/Title3.astro";
+import Title4 from "../components/mdx/typography/Title4.astro";
+import TooltipLink from "../components/mdx/TooltipLink.astro";
+import BasicImage from "../components/mdx/BasicImage.astro";
+import InternalTooltipLink from "../components/mdx/InternalTooltipLink.astro";
+import PageWrapper from "../components/layouts/PageWrapper.astro";
+import ProseWrapper from "../components/layouts/ProseWrapper.astro";
+import Footnote from "../components/mdx/Footnote.astro";
+import ResourceBook from "../components/mdx/ResourceBook.astro";
+import Timeline from "../components/layouts/Timeline.astro";
+import SimpleCard from "../components/mdx/SimpleCard.astro";
+import { Content } from "../content/pages/hire-me.mdx";
+
+const components = {
+	h1: Title1,
+	h2: Title2,
+	h3: Title3,
+	h4: Title4,
+	a: TooltipLink,
+	img: BasicImage,
+	InternalTooltipLink,
+	Footnote,
+	ResourceBook,
+	BasicImage,
+	Timeline,
+	SimpleCard,
+};
+---
+
+<Layout title="Hire Karl August Krogh Nybo">
+	<PageWrapper>
+		<header class="header">
+			<Title1>Hire Karl August</Title1>
+			<Title2>
+				Senior product designer and design engineer seeks friendly, London-based team working on
+				seriously useful AI/ML tools and products.
+			</Title2>
+		</header>
+		<ProseWrapper>
+			<Content components={components} />
+		</ProseWrapper>
+	</PageWrapper>
+</Layout>
+
+<style>
+	.header {
+		margin: var(--space-xl) auto;
+		max-width: 800px;
+	}
+
+	@media (max-width: 768px) {
+		.header {
+			margin: var(--space-s) 0;
+			max-width: 100%;
+		}
+	}
+</style>

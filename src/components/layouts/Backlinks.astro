@@ -1,0 +1,151 @@
+---
+import GrowthIcon from "./GrowthIcon.astro";
+
+interface Props {
+	backlinks: {
+		slug: string;
+		title: string;
+		description: string;
+		growthStage?: string;
+	}[];
+}
+
+const { backlinks } = Astro.props;
+---
+
+<section class="backlink-container">
+	<div class="inner-container">
+		<h3>{backlinks.length} Backlinks</h3>
+		<div class="grid">
+			{
+				backlinks.map((backlink) => (
+					<a href={backlink.slug} class="backlink-card">
+						{backlink.growthStage && (
+							<GrowthIcon
+								growthStage={
+									backlink.growthStage as "budding" | "evergreen" | "seedling"
+								}
+								size="24"
+							/>
+						)}
+						<div>
+							<h4>{backlink.title}</h4>
+							<span>{backlink.description}</span>
+						</div>
+					</a>
+				))
+			}
+		</div>
+	</div>
+</section>
+
+<style>
+	.backlink-container {
+		display: flex;
+		flex-direction: column;
+		font-family: var(--font-sans);
+		background: white;
+		color: var(--color-gray-800);
+		margin: 0 0.5rem;
+	}
+
+	.inner-container {
+		width: 880px;
+		max-width: 100%;
+		margin: 0 auto;
+		box-shadow: var(--box-shadow-lg);
+		border-radius: 8px;
+		padding: 1.5rem 2rem;
+		margin-bottom: -3rem;
+		border: 1px solid var(--color-gray-100);
+		background: white;
+	}
+
+	.inner-container h3 {
+		font-size: var(--font-size-md);
+		font-weight: 300;
+	}
+
+	.grid {
+		margin: var(--space-m) auto 0;
+		display: grid;
+		max-width: 900px;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		word-break: break-word;
+		grid-gap: var(--space-3xs);
+	}
+
+	.backlink-card {
+		display: flex;
+		flex-direction: row;
+		padding: 0 var(--space-xs) var(--space-xs) var(--space-2xs);
+		margin: 0 var(--space-xs) var(--space-xs) 0;
+		transition: all 0.3s ease-in-out;
+	}
+
+	.backlink-card h4 {
+		color: var(--color-gray-800);
+		transition: all 0.3s ease-in-out;
+		font-family: var(--font-body);
+		font-size: var(--font-size-base);
+		font-weight: 400;
+		line-height: var(--leading-snug);
+		margin: 0;
+		margin-left: var(--space-xs);
+	}
+
+	.backlink-card svg {
+		position: relative;
+		top: 4px;
+		flex-shrink: 0;
+	}
+
+	.backlink-card div {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.backlink-card span {
+		font-family: var(--font-sans);
+		color: var(--color-gray-600);
+		font-size: var(--font-size-sm);
+		font-weight: 400;
+		margin: var(--space-2xs) 0 0 var(--space-xs);
+	}
+
+	.backlink-card:hover {
+		cursor: pointer;
+	}
+
+	.backlink-card:hover h4 {
+		color: var(--color-accent-brown);
+	}
+
+	@media (max-width: 640px) {
+		.inner-container {
+			padding: var(--space-s) var(--space-xs);
+		}
+
+		.grid {
+			padding: 0 var(--space-xs);
+			margin: var(--space-m) auto var(--space-s);
+		}
+
+		h3 {
+			margin-top: var(--space-m);
+		}
+	}
+</style>
+
+<script>
+	import { animate } from "motion";
+
+	const cards = document.querySelectorAll(".backlink-card");
+	animate(
+		cards,
+		{ opacity: [0, 1], y: [20, 0] },
+		{
+			duration: 0.3,
+		}
+	);
+</script>

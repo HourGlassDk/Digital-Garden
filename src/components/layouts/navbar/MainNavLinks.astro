@@ -1,0 +1,489 @@
+---
+import { Icon } from "astro-icon/components";
+import UnderlineHoverLink from "../../mdx/UnderlineHoverLink.astro";
+// import PatternIcon from "../../icons/PatternIcon.astro";
+---
+
+<div class="main" role="navigation" aria-label="Main">
+	<div class="popover">
+		<a href="/garden" class="hover-link">
+			<span>The Garden</span>
+		</a>
+		<button
+			class="popover-button"
+			aria-expanded="false"
+			aria-controls="garden-dropdown"
+			aria-label="Toggle Garden menu"
+		>
+			<Icon name="heroicons:chevron-down" size={20} class="chevron-icon" />
+		</button>
+
+		<div class="megamenu" id="garden-dropdown" role="list">
+			<div class="megamenu-grid">
+				<a href="/essays" role="listitem" class="megamenu-item">
+					<div class="megamenu-item-content">
+						<Icon name="evergreen" size={20} class="megamenu-icon" />
+						<div class="megamenu-text">
+							<h3 class="megamenu-title">Essays</h3>
+							<p class="megamenu-description">
+								Opinionated, long-form narrative writing with an agenda
+							</p>
+						</div>
+					</div>
+				</a>
+				<a href="/notes" role="listitem" class="megamenu-item">
+					<div class="megamenu-item-content">
+						<Icon name="seedling" size={20} class="megamenu-icon" />
+						<div class="megamenu-text">
+							<h3 class="megamenu-title">Notes</h3>
+							<p class="megamenu-description">
+								Loose notes on things I don't entirely understand yet
+							</p>
+						</div>
+					</div>
+				</a>
+				<!-- <a href="/patterns" role="listitem" class="megamenu-item">
+					<div class="megamenu-item-content">
+						<PatternIcon size={20} class="megamenu-icon" />
+						<div class="megamenu-text">
+							<h3 class="megamenu-title">Patterns</h3>
+							<p class="megamenu-description">
+								A catalogue of design patterns gathered from observation and research
+							</p>
+						</div>
+					</div>
+				</a> -->
+				<a href="/smidgeons" role="listitem" class="megamenu-item">
+					<div class="megamenu-item-content">
+						<Icon name="heroicons:paper-clip" size={20} class="megamenu-icon" />
+						<div class="megamenu-text">
+							<h3 class="megamenu-title">Smidgeons</h3>
+							<p class="megamenu-description">Interesting links, papers, and tiny thoughts</p>
+						</div>
+					</div>
+				</a>
+				<!-- <a href="/talks" role="listitem" class="megamenu-item">
+					<div class="megamenu-item-content">
+						<Icon name="heroicons:presentation-chart-line" size={20} class="megamenu-icon" />
+						<div class="megamenu-text">
+							<h3 class="megamenu-title">Talks</h3>
+							<p class="megamenu-description">Conference talk slides, transcripts, and videos</p>
+						</div>
+					</div>
+				</a> -->
+				<!-- <a href="/podcasts" role="listitem" class="megamenu-item">
+					<div class="megamenu-item-content">
+						<Icon name="heroicons:microphone" size={20} class="megamenu-icon" />
+						<div class="megamenu-text">
+							<h3 class="megamenu-title">Podcasts</h3>
+							<p class="megamenu-description">Podcast episodes I've been a guest on</p>
+						</div>
+					</div>
+				</a> -->
+				<a href="/library" role="listitem" class="megamenu-item">
+					<div class="megamenu-item-content">
+						<Icon name="heroicons:book-open" size={20} class="megamenu-icon" />
+						<div class="megamenu-text">
+							<h3 class="megamenu-title">Library</h3>
+							<p class="megamenu-description">Books I've read and recommend</p>
+						</div>
+					</div>
+				</a>
+				<a href="/antilibrary" role="listitem" class="megamenu-item">
+					<div class="megamenu-item-content">
+						<Icon name="heroicons:cube-transparent" size={20} class="megamenu-icon" />
+						<div class="megamenu-text">
+							<h3 class="megamenu-title">Antilibrary</h3>
+							<p class="megamenu-description">Books I like the idea of having read</p>
+						</div>
+					</div>
+				</a>
+			</div>
+		</div>
+	</div>
+
+	<div class="outside-dropdown">
+		<UnderlineHoverLink href="/now">Now</UnderlineHoverLink>
+		<UnderlineHoverLink href="/about">About</UnderlineHoverLink>
+	</div>
+</div>
+
+<script>
+
+	function initializeDropdown() {
+		const button = document.querySelector(".popover-button") as HTMLButtonElement;
+		const megamenu = document.getElementById("garden-dropdown") as HTMLElement;
+
+		if (!button || !megamenu) return;
+
+		// Force close on initialization and reset styles
+		function closeMegamenu() {
+			if (!button || !megamenu) return;
+			
+			button.setAttribute("aria-expanded", "false");
+			
+			// Animate out first, then hide
+			megamenu.style.opacity = "0";
+			megamenu.style.transform = "rotateX(-15deg)";
+			megamenu.style.scale = "0.95";
+			
+			// Hide after animation completes
+			setTimeout(() => {
+				if (megamenu.style.opacity === "0") {
+					megamenu.classList.add("hidden");
+				}
+			}, 250);
+		}
+
+		function openMegamenu() {
+			if (!megamenu || !button) return;
+			
+			button.setAttribute("aria-expanded", "true");
+			
+			// Show element first, then animate in
+			megamenu.classList.remove("hidden");
+			
+			// Force reflow before animating
+			megamenu.offsetHeight;
+			
+			// Animate in
+			requestAnimationFrame(() => {
+				megamenu.style.opacity = "1";
+				megamenu.style.transform = "rotateX(0deg)";
+				megamenu.style.scale = "1";
+			});
+		}
+
+		// Initialize closed state immediately without animation
+		button.setAttribute("aria-expanded", "false");
+		megamenu.classList.add("hidden");
+		megamenu.style.opacity = "0";
+		megamenu.style.transform = "rotateX(-15deg)";
+		megamenu.style.scale = "0.95";
+
+		// Remove existing listeners to prevent duplicates
+		const existingHandlers = (button as any)._megamenuHandlers;
+		if (existingHandlers) {
+			button.removeEventListener("click", existingHandlers.click);
+			document.removeEventListener("keydown", existingHandlers.keydown);
+			document.removeEventListener("focusout", existingHandlers.focusout);
+			document.removeEventListener("astro:before-preparation", existingHandlers.beforePrep);
+		}
+
+		// Create handler functions
+		const clickHandler = (e: Event) => {
+			e.stopPropagation();
+			if (megamenu.classList.contains("hidden")) {
+				openMegamenu();
+			} else {
+				closeMegamenu();
+			}
+		};
+
+		const keydownHandler = (e: KeyboardEvent) => {
+			if (e.key === "Escape" && !megamenu.classList.contains("hidden")) {
+				closeMegamenu();
+				button.focus();
+			}
+		};
+
+		const focusoutHandler = (e: FocusEvent) => {
+			const target = e.relatedTarget as Node;
+			// Don't close if clicking a link inside the megamenu
+			if (target && megamenu.contains(target)) {
+				return;
+			}
+			if (!megamenu.contains(target) && !button.contains(target)) {
+				closeMegamenu();
+			}
+		};
+
+		// Store handlers for cleanup
+		(button as any)._megamenuHandlers = {
+			click: clickHandler,
+			keydown: keydownHandler,
+			focusout: focusoutHandler,
+			beforePrep: closeMegamenu
+		};
+
+		// Add event listeners
+		button.addEventListener("click", clickHandler);
+		document.addEventListener("keydown", keydownHandler);
+		document.addEventListener("focusout", focusoutHandler);
+		document.addEventListener("astro:before-preparation", closeMegamenu);
+	}
+
+	// Initialize on page load
+	initializeDropdown();
+
+	// Re-initialize after each navigation
+	document.addEventListener("astro:page-load", initializeDropdown);
+</script>
+
+<style>
+	.main {
+		display: flex;
+		flex-shrink: 0;
+	}
+
+	.popover {
+		position: relative;
+	}
+
+	.hover-link {
+		margin-left: var(--space-s);
+		text-decoration: none;
+		font-size: var(--font-size-xs);
+		font-family: var(--font-sans);
+		transition: color 0.2s ease-in-out;
+		cursor: pointer;
+		position: relative;
+		top: 1px;
+		white-space: nowrap;
+		padding-bottom: 0.25rem;
+	}
+
+	.hover-link span {
+		color: var(--color-gray-800);
+	}
+
+	.hover-link:hover span {
+		color: var(--color-accent-brown);
+	}
+
+	.hover-link:focus {
+		outline: 2px solid darkblue;
+		border-radius: 2px;
+	}
+
+	.hover-link::before {
+		content: "";
+		transform-origin: 50% 100%;
+		background: var(--color-primary-green);
+		transition:
+			clip-path 0.3s,
+			transform 0.3s cubic-bezier(0.2, 1, 0.8, 1);
+		position: absolute;
+		width: 100%;
+		height: 1px;
+		top: 95%;
+		left: 0;
+		pointer-events: none;
+		clip-path: polygon(
+			0% 0%,
+			0% 100%,
+			0 100%,
+			0 0,
+			100% 0,
+			100% 100%,
+			0 100%,
+			0 100%,
+			100% 100%,
+			100% 0%
+		);
+	}
+
+	.hover-link:hover::before {
+		transform: translate3d(0, 2px, 0) scale3d(1, 2, 1);
+		clip-path: polygon(
+			0% 0%,
+			0% 100%,
+			100% 100%,
+			50% 0,
+			50% 0,
+			50% 100%,
+			50% 100%,
+			0 100%,
+			100% 100%,
+			100% 0%
+		);
+	}
+
+	.popover-button {
+		padding: 0 0.25rem;
+		border-radius: 4px;
+		margin-left: var(--space-3xs);
+		position: relative;
+		top: 0;
+	}
+
+	.chevron-icon {
+		vertical-align: middle;
+		transition:
+			color 0.3s ease-in-out,
+			background-color 0.3s ease-in-out,
+			transform 0.8s ease-in-out;
+		color: var(--color-gray-600);
+	}
+
+	.popover-button:hover {
+		cursor: pointer;
+		background-color: var(--color-gray-100);
+	}
+
+	.popover-button:hover .chevron-icon {
+		color: var(--color-primary-green);
+		transform: rotateY(180deg);
+	}
+
+	.megamenu {
+		display: flex;
+		margin-top: 0.6rem;
+		background: var(--color-cream);
+		border: 1px solid var(--color-tinted-cream);
+		border-radius: var(--border-radius-base);
+		box-shadow:
+			0.2px 0.4px 0.8px -10px rgba(0, 0, 0, 0.1),
+			0.4px 0.9px 2px -10px rgba(0, 0, 0, 0.11),
+			0.8px 1.8px 3.8px -10px rgba(0, 0, 0, 0.12),
+			1.3px 3.1px 6.7px -10px rgba(0, 0, 0, 0.13),
+			2.5px 5.8px 12.5px -10px rgba(0, 0, 0, 0.15),
+			6px 14px 30px -10px rgba(0, 0, 0, 0.18);
+		z-index: 1;
+		position: absolute;
+		transform-origin: top;
+		padding: var(--space-2xs);
+		min-width: 600px;
+		right: -100%;
+		top: 100%;
+		opacity: 0;
+		transform: rotateX(90deg);
+		scale: 0.95;
+		transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), scale 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
+	.megamenu.hidden {
+		display: none;
+	}
+
+	.megamenu-grid {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 0;
+		width: 100%;
+	}
+
+	.megamenu-item {
+		text-decoration: none;
+		padding: var(--space-xs);
+		border-radius: var(--border-radius-base);
+		transition: all 0.3s ease-in-out;
+		border: 1px solid transparent;
+		display: block;
+	}
+
+	.megamenu-item-content {
+		display: flex;
+		flex-direction: row;
+		align-items: flex-start;
+		gap: var(--space-xs);
+	}
+
+	.megamenu-icon {
+		flex-shrink: 0;
+		color: var(--color-primary-green);
+		margin-top: 2px;
+		transition: all 0.3s ease-in-out;
+	}
+
+	.megamenu-text {
+		flex: 1;
+	}
+
+	.evergreen__cls-1 {
+		fill: var(--color-primary-green);
+	}
+
+	.megamenu-item:hover {
+		background: var(--color-light-cream);
+		border-color: var(--color-tinted-cream);
+		transform: translateY(-1px);
+	}
+
+	.megamenu-title {
+		font-family: var(--font-sans);
+		font-size: var(--font-size-sm);
+		font-weight: 600;
+		color: var(--color-gray-800);
+		margin: 0 0 var(--space-3xs) 0;
+		transition: color 0.3s ease-in-out;
+	}
+
+	.megamenu-description {
+		font-family: var(--font-sans);
+		font-size: var(--font-size-xs);
+		color: var(--color-gray-600);
+		margin: 0;
+		line-height: var(--leading-snug);
+		transition: color 0.3s ease-in-out;
+	}
+
+	.megamenu-item:hover .megamenu-title {
+		color: var(--color-accent-brown);
+	}
+
+	.megamenu-item:hover .megamenu-description {
+		color: var(--color-gray-800);
+	}
+
+	.megamenu-item:hover .megamenu-icon {
+		color: var(--color-accent-brown);
+		transform: scale(1.1);
+	}
+
+	/* Pattern card leaf animations for the patterns menu item */
+	.megamenu-item:hover :global(.left-leaf) {
+		transform: translateX(29px);
+		transition: transform 0.3s ease-in-out;
+	}
+
+	.megamenu-item:hover :global(.right-leaf) {
+		transform: translateX(-29px);
+		transition: transform 0.3s ease-in-out;
+	}
+
+	:global(.left-leaf) {
+		transition: transform 0.3s ease-in-out;
+		will-change: transform;
+	}
+
+	:global(.right-leaf) {
+		transition: transform 0.3s ease-in-out;
+		will-change: transform;
+	}
+
+	.outside-dropdown :global(.link-container) {
+		margin-left: var(--space-s);
+		top: 1px;
+		left: 3px;
+	}
+
+	.outside-dropdown :global(.styled-link span) {
+		font-size: var(--font-size-xs);
+		font-family: var(--font-sans);
+		color: var(--color-gray-800);
+	}
+
+	@media screen and (max-width: 1024px) {
+		.megamenu {
+			min-width: 500px;
+		}
+	}
+
+	@media screen and (max-width: 768px) {
+		.megamenu {
+			min-width: 400px;
+			right: -100px;
+		}
+
+		.megamenu-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media screen and (max-width: 550px) {
+		.main {
+			display: none;
+		}
+	}
+</style>

@@ -1,0 +1,20 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+	growthStage: "seedling" | "budding" | "evergreen";
+	size?: string;
+}
+
+const { growthStage, size = "22" } = Astro.props;
+---
+
+{
+	growthStage === "seedling" ? (
+		<Icon name="seedling" width={size} height={size} style="flex-shrink: 0;" />
+	) : growthStage === "budding" ? (
+		<Icon name="budding" width={size} height={size} style="flex-shrink: 0;" />
+	) : growthStage === "evergreen" ? (
+		<Icon name="evergreen" width={size} height={size} style="flex-shrink: 0;" />
+	) : null
+}

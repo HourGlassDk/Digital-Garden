@@ -1,0 +1,39 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+	icon_name: string;
+	href: string;
+}
+
+const { icon_name, href } = Astro.props;
+---
+
+<div class="link-container">
+	<Icon name={icon_name} size={16} />
+	<a href={href} class="underline-hover-link">
+		<slot />
+	</a>
+</div>
+
+<style>
+	.link-container {
+		display: flex;
+		gap: 0.25rem;
+		font-family: var(--font-sans);
+		font-size: var(--font-size-sm);
+		align-items: center;
+		color: var(--color-gray-600);
+		margin-bottom: 0.5rem;
+	}
+
+	.link-container svg {
+		transition: all 0.2s ease-in;
+		margin-top: 0.25rem;
+		color: var(--color-accent-brown);
+	}
+
+	.link-container:hover svg {
+		color: var(--color-primary-green);
+	}
+</style>

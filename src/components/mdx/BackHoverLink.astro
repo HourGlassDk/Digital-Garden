@@ -1,0 +1,59 @@
+---
+import { Icon } from "astro-icon/components";
+
+const { href } = Astro.props;
+---
+
+<a href={href} class="link-container">
+	<Icon name="heroicons:arrow-left" size={16} />
+	<span class="styled-link">
+		<slot />
+	</span>
+</a>
+
+<style>
+	.link-container {
+		display: inline-block;
+		align-items: center;
+		justify-content: center;
+		position: relative;
+		left: 3px;
+		top: 1px;
+		cursor: pointer;
+		transition:
+			all 0.8s,
+			transform 0.3s cubic-bezier(0.2, 1, 0.8, 1);
+	}
+
+	.link-container :global(svg) {
+		transition:
+			all 0.8s,
+			transform 0.3s cubic-bezier(0.2, 1, 0.8, 1);
+		color: var(--color-gray-300);
+		position: relative;
+		top: 2px;
+		width: 0;
+	}
+
+	.link-container:hover :global(svg) {
+		width: 16px;
+		margin-right: 2px;
+		color: var(--color-primary-green);
+	}
+
+	.link-container:hover .styled-link {
+		transform: translate3d(3px, 0, 0);
+	}
+
+	.styled-link {
+		display: inline-block;
+		transition:
+			all 0.8s,
+			transform 0.3s cubic-bezier(0.2, 1, 0.8, 1);
+		color: var(--color-primary-green);
+		position: relative;
+		white-space: nowrap;
+		text-decoration: none;
+		outline: none;
+	}
+</style>

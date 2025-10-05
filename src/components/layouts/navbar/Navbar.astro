@@ -1,0 +1,114 @@
+---
+import MainNavLinks from "./MainNavLinks.astro";
+import Logo from "../../animated-icons/Logo.astro";
+import MobileMenu from "./MobileMenu.astro";
+import { Icon } from "astro-icon/components";
+---
+
+<nav class="navbar" transition:persist>
+	<a href="/" aria-label="home">
+		<span class="visually-hidden">Home</span>
+		<Logo />
+	</a>
+	<div class="right-hand-side">
+		<MainNavLinks />
+		<button
+			id="mobile-menu-toggle"
+			class="mobile-menu-toggle"
+			aria-label="Toggle mobile menu"
+		>
+			<Icon name="heroicons:bars-3" size={28} class="menu-icon" />
+			<Icon name="heroicons:x-mark" size={28} class="close-icon" />
+		</button>
+	</div>
+</nav>
+
+<MobileMenu />
+
+<style>
+	.right-hand-side {
+		display: flex;
+		align-items: center;
+	}
+
+	.navbar {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		padding: var(--space-s) var(--space-m) var(--space-s) 1.3rem;
+		animation: fadeIn 0.5s 0.2s forwards;
+		opacity: 0;
+		background: var(--color-cream);
+		position: relative;
+		z-index: 1001;
+	}
+
+	.mobile-menu-toggle {
+		display: none;
+		background: none;
+		border: none;
+		padding: 0;
+		margin-left: var(--space-s);
+		cursor: pointer;
+		color: var(--color-gray-800);
+	}
+
+	.mobile-menu-toggle .close-icon {
+		display: none;
+	}
+
+	.mobile-menu-toggle.open .menu-icon {
+		display: none;
+	}
+
+	.mobile-menu-toggle.open .close-icon {
+		display: block;
+	}
+
+	@media screen and (max-width: 550px) {
+		.navbar {
+			padding: var(--space-s);
+			margin-bottom: var(--space-m);
+		}
+
+		.mobile-menu-toggle {
+			display: block;
+		}
+	}
+
+	@keyframes fadeIn {
+		to {
+			opacity: 1;
+		}
+	}
+</style>
+
+<script>
+	function initializeMobileMenu() {
+		const menuToggle = document.getElementById("mobile-menu-toggle");
+		const mobileMenu = document.getElementById("mobile-menu");
+
+		if (!menuToggle || !mobileMenu) return;
+
+		// Remove existing event listeners
+		const newMenuToggle = menuToggle.cloneNode(true) as HTMLButtonElement;
+		menuToggle.parentNode?.replaceChild(newMenuToggle, menuToggle);
+
+		newMenuToggle.addEventListener("click", () => {
+			newMenuToggle.classList.toggle("open");
+			mobileMenu.classList.toggle("open");
+
+			if (mobileMenu.classList.contains("open")) {
+				document.body.style.overflow = "hidden";
+			} else {
+				document.body.style.overflow = "auto";
+			}
+		});
+	}
+
+	// Initialize on page load
+	initializeMobileMenu();
+
+	// Re-initialize after each navigation
+	document.addEventListener("astro:page-load", initializeMobileMenu);
+</script>

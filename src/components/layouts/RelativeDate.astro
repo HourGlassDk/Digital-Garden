@@ -1,0 +1,51 @@
+---
+import { parseISO, formatDistanceToNow, parse, isValid } from "date-fns";
+
+interface Props {
+	postDate: string | Date;
+}
+
+const { postDate } = Astro.props;
+
+let formattedDate = "Invalid date";
+
+if (!postDate) {
+	formattedDate = "";
+} else {
+	try {
+		let date: Date;
+
+		if (postDate instanceof Date) {
+			date = postDate;
+		} else {
+			// Handle different string formats
+			const dateString = String(postDate).trim();
+
+			// Try parsing as ISO string first (2024-12-26)
+			date = parseISO(dateString);
+
+			// If that fails, try parsing as a regular Date string
+			if (!isValid(date)) {
+				date = new Date(dateString);
+			}
+
+			// If that fails, try parsing common date formats
+			if (!isValid(date)) {
+				// Try parsing YYYY-MM-DD format specifically
+				const match = dateString.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+				if (match) {
+					date = new Date(parseInt(match[1]), parseInt(match[2]) - 1, parseInt(match[3]));
+				}
+			}
+		}
+
+		if (isValid(date)) {
+			formattedDate = formatDistanceToNow(date, { addSuffix: true });
+		}
+	} catch (error) {
+		console.error("Date parsing error:", error, "for postDate:", postDate);
+	}
+}
+---
+
+<span>{formattedDate}</span>

@@ -1,0 +1,179 @@
+---
+interface Props {
+	steps: {
+		content: string;
+		repeated?: boolean;
+	}[];
+}
+
+const { steps } = Astro.props;
+
+// Group steps into repeated and non-repeated
+const repeatedSteps = steps.filter((step) => step.repeated);
+const normalSteps = steps.filter((step) => !step.repeated);
+---
+
+<div class="step-flow">
+	{
+		repeatedSteps.length > 0 && (
+			<>
+				<div class="repeated-container">
+					<div class="repeated-label">Repeat a dozen or so times</div>
+					{repeatedSteps.map((step, index) => (
+						<>
+							<div class="step">
+								<span class="step-number">{index + 1}</span>
+								<span class="step-text">{step.content}</span>
+							</div>
+							{index < repeatedSteps.length - 1 && (
+								<div class="arrow">
+									<svg
+										width="24"
+										height="24"
+										viewBox="0 0 24 24"
+										fill="none"
+										xmlns="http://www.w3.org/2000/svg"
+									>
+										<path
+											d="M13.5 5L20.5 12L13.5 19M4 12H20"
+											stroke="currentColor"
+											stroke-width="2"
+											stroke-linecap="round"
+											stroke-linejoin="round"
+										/>
+									</svg>
+								</div>
+							)}
+						</>
+					))}
+				</div>
+				{normalSteps.length > 0 && (
+					<div class="arrow">
+						<svg
+							width="24"
+							height="24"
+							viewBox="0 0 24 24"
+							fill="none"
+							xmlns="http://www.w3.org/2000/svg"
+						>
+							<path
+								d="M13.5 5L20.5 12L13.5 19M4 12H20"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							/>
+						</svg>
+					</div>
+				)}
+			</>
+		)
+	}
+
+	{
+		normalSteps.map((step, index) => (
+			<>
+				<div class="step">
+					<span class="step-number">{repeatedSteps.length + index + 1}</span>
+					<span class="step-text">{step.content}</span>
+				</div>
+				{index < normalSteps.length - 1 && (
+					<div class="arrow">
+						<svg
+							width="24"
+							height="24"
+							viewBox="0 0 24 24"
+							fill="none"
+							xmlns="http://www.w3.org/2000/svg"
+						>
+							<path
+								d="M13.5 5L20.5 12L13.5 19M4 12H20"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							/>
+						</svg>
+					</div>
+				)}
+			</>
+		))
+	}
+</div>
+
+<style>
+	.step-flow {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 1rem;
+		margin: 2rem 0;
+		font-family: var(--font-sans);
+		width: 100%;
+	}
+
+	.repeated-container {
+		position: relative;
+		width: 100%;
+		border: 2px dashed var(--color-gray-400);
+		border-radius: 12px;
+		padding: 2rem;
+		padding-bottom: 3rem;
+		margin-bottom: 1rem;
+	}
+
+	.repeated-label {
+		position: absolute;
+		bottom: -0.75rem;
+		left: 50%;
+		transform: translateX(-50%);
+		background-color: var(--color-cream);
+		padding: 0 0.75rem;
+		color: var(--color-gray-600);
+		font-size: 0.875rem;
+	}
+
+	.step {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 0.75rem 1.25rem;
+		background-color: var(--color-cream);
+		border-radius: 8px;
+		width: 100%;
+	}
+
+	.step-number {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 24px;
+		height: 24px;
+		background-color: var(--color-primary-green);
+		color: white;
+		border-radius: 50%;
+		font-size: 0.875rem;
+		font-weight: 500;
+	}
+
+	.step-text {
+		color: var(--color-gray-800);
+		font-size: 1rem;
+		line-height: 1.4;
+	}
+
+	.arrow {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: var(--color-gray-400);
+		transform: rotate(90deg);
+		width: 100%;
+	}
+
+	@media (max-width: 768px) {
+		.arrow {
+			margin-left: 0;
+		}
+	}
+</style>

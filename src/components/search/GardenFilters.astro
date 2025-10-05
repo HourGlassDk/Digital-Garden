@@ -1,0 +1,366 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+	topics: string[];
+}
+
+const { topics } = Astro.props;
+const initialTopicsCount = 6;
+---
+
+<div class="container">
+	<div class="topics-container">
+		<div class="topic-label">
+			<span>Topics</span>
+			<svg width="2" height="14" fill="var(--color-primary-green)">
+				<rect width="2" height="14"></rect>
+			</svg>
+		</div>
+		<div id="topics-menu" class="topics-list">
+			{
+				topics.slice(0, initialTopicsCount).map((topic) => (
+					<button class="topic-button visible" data-topic={topic}>
+						{topic}
+					</button>
+				))
+			}
+			{
+				topics.slice(initialTopicsCount).map((topic) => (
+					<button class="topic-button hidden" data-topic={topic}>
+						{topic}
+					</button>
+				))
+			}
+			{
+				topics.length > initialTopicsCount && (
+					<button class="toggle-topics" data-show-more="true">
+						Show More
+					</button>
+				)
+			}
+		</div>
+	</div>
+
+	<div class="right-menus">
+		<div class="mobile-topics">
+			<div class="select-wrapper">
+				<select id="topics-select" aria-label="Topics">
+					<option value="">All Topics</option>
+					{topics.map((topic) => <option value={topic}>{topic}</option>)}
+				</select>
+				<Icon name="heroicons:chevron-down" size={16} />
+			</div>
+		</div>
+		<div class="select-wrapper">
+			<select id="growth-stages-select" aria-label="Growth Stages">
+				<option value="">All Growth Stages</option>
+				<option value="seedling">Seedling</option>
+				<option value="budding">Budding</option>
+				<option value="evergreen">Evergreen</option>
+			</select>
+			<Icon name="heroicons:chevron-down" size={16} />
+		</div>
+		<div class="select-wrapper">
+			<select id="types-select" aria-label="Types">
+				<option value="">All Types</option>
+				<option value="essay">Essays</option>
+				<option value="note">Notes</option>
+				<!-- <option value="pattern">Patterns</option> -->
+				<!-- <option value="talk">Talks</option> -->
+				<!-- <option value="podcast">Podcasts</option> -->
+				<option value="now">Now Updates</option>
+				<option value="smidgeon">Smidgeons</option>
+			</select>
+			<Icon name="heroicons:chevron-down" size={16} />
+		</div>
+	</div>
+</div>
+
+<style>
+	.mobile-topics {
+		display: none;
+	}
+	@media (max-width: 768px) {
+		.mobile-topics {
+			display: block;
+		}
+	}
+
+	.right-menus {
+		display: flex;
+		flex-direction: row;
+		gap: var(--space-3xs);
+	}
+	@media (max-width: 768px) {
+		.right-menus {
+			justify-content: center;
+		}
+	}
+	@media (max-width: 500px) {
+		.right-menus {
+			flex-direction: column;
+		}
+	}
+
+	.select-wrapper {
+		position: relative;
+		display: inline-block;
+		width: auto;
+		max-height: 32px;
+	}
+
+	.select-wrapper [data-icon] {
+		position: absolute;
+		right: 8px;
+		top: 50%;
+		transform: translateY(-50%);
+		color: var(--color-gray-700);
+		pointer-events: none;
+	}
+
+	.right-menus select {
+		padding: 0.4rem var(--space-2xs);
+		padding-right: var(--space-l);
+		border-radius: var(--border-radius-base);
+		border: 1px solid var(--color-gray-300);
+		color: var(--color-gray-700);
+		background-color: var(--color-cream);
+		transition: all 0.3s ease-in-out;
+		appearance: none;
+		width: auto;
+		min-width: 180px;
+		line-height: 1.2;
+		height: 32px;
+	}
+	@media (max-width: 768px) {
+		.select-wrapper {
+			width: 100%;
+		}
+		.right-menus select {
+			width: 100%;
+		}
+	}
+	.right-menus select:hover {
+		background: white;
+		cursor: pointer;
+	}
+
+	.container {
+		display: flex;
+		flex-direction: row;
+		gap: var(--space-m);
+		align-items: top;
+		justify-content: space-between;
+		font-family: var(--font-sans);
+		font-size: var(--font-size-xs);
+		color: var(--color-gray-800);
+		margin-bottom: var(--space-xl);
+	}
+	@media (max-width: 768px) {
+		.container {
+			flex-direction: column;
+		}
+	}
+
+	.topic-label {
+		display: flex;
+		padding: var(--space-3xs) var(--space-2xs) var(--space-3xs) 0;
+		color: var(--color-black);
+		text-transform: uppercase;
+		letter-spacing: 0.04rem;
+		margin-right: var(--space-3xs);
+	}
+	.topic-label svg {
+		margin: 4px 0 0 12px;
+	}
+
+	.topics-container {
+		display: inline-flex;
+		flex-direction: row;
+	}
+	@media (max-width: 768px) {
+		.topics-container {
+			display: none;
+		}
+	}
+
+	.topics-list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 4px;
+	}
+
+	.topic-button {
+		border: none;
+		background: none;
+		padding: var(--space-3xs) var(--space-2xs);
+		border-radius: 3rem;
+		color: var(--color-gray-800);
+		cursor: pointer;
+		transition: all 0.4s ease;
+	}
+
+	.topic-button.hidden {
+		display: none;
+	}
+
+	.topic-button:hover {
+		background-color: var(--color-tinted-cream);
+		color: var(--color-black);
+	}
+
+	.topic-button.selected {
+		background-color: var(--color-primary-green);
+		color: white;
+	}
+
+	.topic-button.selected:hover {
+		background-color: var(--color-secondary-green);
+	}
+
+	.toggle-topics {
+		flex-shrink: 0;
+		margin: 0;
+		padding: var(--space-3xs) var(--space-2xs);
+		border-radius: var(--border-radius-base);
+		color: var(--color-gray-700);
+		transition: all 0.4s ease;
+		line-height: 1.2;
+		margin-top: var(--space-3xs);
+		font-size: calc(var(--font-size-xs) / 1.2);
+		text-transform: uppercase;
+		letter-spacing: 0.04rem;
+		color: var(--color-accent-brown);
+		border: none;
+		background: none;
+	}
+
+	@media (max-width: 768px) {
+		.toggle-topics {
+			display: none;
+		}
+	}
+
+	.toggle-topics:hover {
+		background-color: white;
+		cursor: pointer;
+	}
+
+	.toggle-topics:disabled {
+		display: none;
+	}
+</style>
+
+<script>
+	interface FilterState {
+		topic: string;
+		growthStage: string;
+		type: string;
+	}
+
+	const filterState: FilterState = {
+		topic: "",
+		growthStage: "",
+		type: "",
+	};
+
+	function handleToggleClick(e: Event) {
+		const toggleButton = e.currentTarget as HTMLButtonElement;
+		const isShowingMore = toggleButton.getAttribute("data-show-more") === "true";
+		const topicButtons = document.querySelectorAll<HTMLButtonElement>(".topic-button");
+
+		topicButtons.forEach((button, index) => {
+			if (index >= 6) {
+				button.classList.toggle("hidden", !isShowingMore);
+			}
+		});
+
+		toggleButton.textContent = isShowingMore ? "Show Less" : "Show More";
+		toggleButton.setAttribute("data-show-more", (!isShowingMore).toString());
+	}
+
+	function handleTopicClick(e: Event) {
+		const button = (e.target as HTMLElement).closest(".topic-button");
+		if (!button) return;
+
+		const topicButtons = document.querySelectorAll<HTMLButtonElement>(".topic-button");
+		const topicsSelect = document.getElementById("topics-select") as HTMLSelectElement;
+		const wasSelected = button.classList.contains("selected");
+
+		// Remove selected class from all buttons
+		topicButtons.forEach((btn) => btn.classList.remove("selected"));
+
+		// If the button wasn't previously selected, select it
+		if (!wasSelected) {
+			button.classList.add("selected");
+			filterState.topic = button.getAttribute("data-topic") || "";
+		} else {
+			filterState.topic = "";
+		}
+
+		// Update mobile select to match
+		if (topicsSelect) {
+			topicsSelect.value = filterState.topic;
+		}
+
+		// Dispatch filter change event
+		document.dispatchEvent(
+			new CustomEvent("filter-change", {
+				detail: { ...filterState },
+			}),
+		);
+	}
+
+	function handleSelectChange(e: Event) {
+		const select = e.target as HTMLSelectElement;
+		if (!select || !select.id) return;
+
+		// Update filter state based on which select changed
+		switch (select.id) {
+			case "topics-select":
+				filterState.topic = select.value;
+				// Update topic buttons to match
+				const topicButtons = document.querySelectorAll<HTMLButtonElement>(".topic-button");
+				topicButtons.forEach((btn) => {
+					btn.classList.toggle("selected", btn.getAttribute("data-topic") === select.value);
+				});
+				break;
+			case "growth-stages-select":
+				filterState.growthStage = select.value;
+				break;
+			case "types-select":
+				filterState.type = select.value;
+				break;
+		}
+
+		// Dispatch filter change event
+		document.dispatchEvent(
+			new CustomEvent("filter-change", {
+				detail: { ...filterState },
+			}),
+		);
+	}
+
+	function init() {
+		const toggleButton = document.querySelector(".toggle-topics");
+		const topicsList = document.querySelector(".topics-list");
+		const rightMenus = document.querySelector(".right-menus");
+
+		if (toggleButton) {
+			toggleButton.addEventListener("click", handleToggleClick);
+		}
+		if (topicsList) {
+			topicsList.addEventListener("click", handleTopicClick);
+		}
+		if (rightMenus) {
+			rightMenus.addEventListener("change", handleSelectChange);
+		}
+	}
+
+	// Initialize on first load
+	init();
+
+	// Re-initialize after page navigation
+	document.addEventListener("astro:page-load", init);
+</script>

@@ -1,0 +1,238 @@
+---
+interface ImageData {
+	src: string;
+	alt: string;
+}
+
+interface Props {
+	data: ImageData[];
+	title?: string;
+}
+
+const { data, title } = Astro.props;
+
+if (!data || data.length === 0) {
+	throw new Error("ScrollingImages component requires at least one image");
+}
+---
+
+<div class="container">
+	<div class="sticky-container">
+		{title && <span class="title">{title}</span>}
+		<div class="image-container">
+			{
+				data.map((img, i) => (
+					<img
+						class={i === 0 ? "base-image" : "fade-image"}
+						data-index={i}
+						alt={img.alt}
+						src={img.src}
+					/>
+				))
+			}
+		</div>
+	</div>
+	<div class="scroll-trigger"></div>
+</div>
+
+<script>
+	import scrollama from "scrollama";
+
+	let scroller: any;
+	let fadeImages: NodeListOf<HTMLImageElement>;
+	let currentStep = -1;
+
+	function initScrollama() {
+		scroller = scrollama();
+		fadeImages = document.querySelectorAll(".fade-image");
+
+		scroller
+			.setup({
+				step: ".scroll-trigger",
+				offset: 0.5,
+				progress: true,
+			})
+			.onStepProgress((response: any) => {
+				const { progress } = response;
+				const totalImages = fadeImages.length;
+
+				// Adjust progress calculation to give more time to base image
+				let currentImage;
+				if (progress < 0.2) {
+					// Stay on base image (-1) for first 20% of scroll
+					currentImage = -1;
+				} else if (progress < 0.8) {
+					// Scale remaining transitions between 20% and 80%
+					const adjustedProgress = (progress - 0.2) / 0.6;
+					currentImage = Math.floor(adjustedProgress * totalImages);
+				} else {
+					// Show final image for last 20% of scroll
+					currentImage = totalImages - 1;
+				}
+
+				if (currentImage !== currentStep) {
+					currentStep = currentImage;
+					fadeImages.forEach((img, index) => {
+						if (index <= currentImage && currentImage >= 0) {
+							img.classList.add("visible");
+						} else {
+							img.classList.remove("visible");
+						}
+					});
+				}
+			});
+	}
+
+	// Initial setup
+	initScrollama();
+
+	// Handle resize
+	const handleResize = () => scroller?.resize();
+	window.addEventListener("resize", handleResize);
+
+	// Reinit on view transitions
+	document.addEventListener("astro:page-load", initScrollama);
+
+	// Cleanup
+	const cleanup = () => {
+		scroller?.destroy();
+		window.removeEventListener("resize", handleResize);
+	};
+
+	document.addEventListener("astro:before-swap", cleanup);
+	document.addEventListener("astro:unmount", cleanup);
+</script>
+
+<style>
+	.container {
+		position: relative;
+		grid-column: 1/4 !important;
+		height: 320vh;
+		margin: 0;
+		margin-bottom: max(260px, 25vh);
+	}
+
+	.sticky-container {
+		position: sticky;
+		top: 48px;
+		height: 70vh;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: flex-start;
+		padding-top: 2rem;
+		z-index: 1;
+	}
+
+	.scroll-trigger {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		pointer-events: none;
+	}
+
+	.image-container {
+		position: relative;
+		width: auto;
+		max-width: 1300px;
+		height: 85vh;
+		margin: 0 auto;
+		padding: 0 1rem;
+		aspect-ratio: 16/9;
+	}
+
+	img {
+		width: auto;
+		height: 85vh;
+		position: absolute;
+		left: 50%;
+		transform: translateX(-50%);
+		top: 24px;
+		object-fit: contain;
+		border: 1px solid var(--color-gray-100);
+		border-radius: 0.5rem;
+		box-shadow: var(--box-shadow-sm);
+		opacity: 0;
+	}
+
+	.base-image {
+		position: relative;
+		opacity: 1;
+	}
+
+	.fade-image {
+		opacity: 0;
+		transition: opacity 0.8s ease-out;
+		z-index: var(--z-index);
+	}
+
+	.fade-image.visible {
+		opacity: 1;
+	}
+
+	.fade-image[data-index="1"] {
+		--z-index: 2;
+	}
+
+	.fade-image[data-index="2"] {
+		--z-index: 3;
+	}
+
+	.fade-image[data-index="3"] {
+		--z-index: 4;
+	}
+
+	.title {
+		position: absolute;
+		top: 0;
+		left: 50%;
+		transform: translateX(-50%);
+		font-family: var(--font-sans);
+		font-size: var(--font-size-sm);
+		color: var(--color-gray-800);
+		font-weight: 400;
+		text-align: center;
+		z-index: 10;
+	}
+
+	@media (max-width: 768px) {
+		.container {
+			height: auto;
+			padding: 2rem 0;
+			margin-bottom: max(32px, 3vh);
+		}
+
+		.sticky-container {
+			position: static;
+			height: auto;
+			padding: 2rem 1rem;
+		}
+
+		.image-container {
+			aspect-ratio: auto;
+			height: auto;
+			display: flex;
+			flex-direction: column;
+			gap: 2rem;
+		}
+
+		img {
+			position: relative;
+			margin-bottom: 1rem;
+			opacity: 1 !important;
+		}
+
+		.fade-image {
+			position: relative;
+			display: block;
+			opacity: 1;
+		}
+
+		.base-image {
+			margin-bottom: 2rem;
+		}
+	}
+</style>

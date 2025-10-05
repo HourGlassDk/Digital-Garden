@@ -1,0 +1,106 @@
+---
+const { sourceTitle = "", author = "", year = "", sourceLink, margin } = Astro.props;
+---
+
+<div class="card-container" style={margin ? `margin: ${margin}` : ''}>
+  <div class="quote">
+    <slot />
+  </div>
+  <cite class="cite">
+    {sourceTitle && (
+      sourceLink ? (
+        <a href={sourceLink}>
+          <span>{sourceTitle}</span>
+        </a>
+        <div class="dot"></div>
+      ) : (
+        <span>{sourceTitle}</span>
+        <div class="dot"></div>
+      )
+    )}
+    {author && (
+      <>
+        <span>{author}</span>
+      </>
+    )}
+    {year && (
+      <>
+        <div class="dot"></div>
+        <span>{year}</span>
+      </>
+    )}
+  </cite>
+</div>
+
+<style>
+  .card-container {
+    margin: var(--space-3xs) auto var(--space-m);
+    box-shadow: var(--box-shadow-lg);
+    border-radius: var(--border-radius-base);
+    border: 1px solid var(--color-tinted-cream);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--space-l);
+    grid-column: 1/4 !important;
+    max-width: 848px;
+    width: 100%;
+  }
+
+  .card-container :global(h1),
+  .card-container :global(h2),
+  .card-container :global(h3),
+  .card-container :global(h4),
+  .card-container :global(h5),
+  .card-container :global(p),
+  .card-container :global(ol),
+  .card-container :global(ul .tweet) {
+    margin: var(--space-2xs) 0;
+  }
+
+  .quote :global(p) {
+    font-size: var(--font-size-base);
+    line-height: 1.75;
+    margin-top: -0.5rem;
+    color: var(--color-gray-700);
+  }
+
+  .quote :global(ol),
+  .quote :global(ul > li) {
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+
+  .cite {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    margin-top: 1rem;
+  }
+
+  .cite span {
+    font-family: var(--font-sans);
+    font-size: var(--font-size-sm);
+    font-style: normal;
+    color: var(--color-gray-600);
+  }
+
+  .cite a span {
+    color: var(--color-primary-green);
+    transition: all ease-in 0.2s;
+  }
+
+  .cite a span:hover {
+    color: var(--color-accent-brown);
+  }
+
+  .dot {
+    width: 5px;
+    height: 5px;
+    margin: 3px 2px 0 2px;
+    background-color: var(--color-gray-300);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+</style>

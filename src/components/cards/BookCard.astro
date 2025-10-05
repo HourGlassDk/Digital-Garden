@@ -1,0 +1,134 @@
+---
+const { small, cover, title, subtitle, author, link } = Astro.props;
+import { Icon } from "astro-icon/components";
+import { Image } from "astro:assets";
+---
+
+<a
+	href={link}
+	target="_blank"
+	rel="noopener noreferrer"
+	style="cursor: pointer;"
+>
+	<div class="book-card" data-small={small}>
+		<div class="external-hover-link" data-small={small}>
+			View on Google
+			<Icon
+				name="heroicons:arrow-top-right-on-square-20-solid"
+				size={18}
+				style="position: relative; top: 3px;"
+			/>
+		</div>
+
+		{
+			cover && (
+				<div class="image-wrapper">
+					<Image
+						src={cover}
+						alt={title}
+						width={230}
+						height={345}
+						style="width: 100%; height: auto; object-fit: contain;"
+					/>
+				</div>
+			)
+		}
+
+		<div>
+			<p>
+				{title}
+				{!small && subtitle && `: ${subtitle}`}
+			</p>
+			<span class="metadata">{author}</span>
+		</div>
+	</div>
+</a>
+
+<style>
+	.image-wrapper {
+		display: grid;
+		place-items: baseline;
+		width: 100%;
+		max-width: 230px;
+		aspect-ratio: 2/3;
+		margin: 0;
+	}
+
+	.external-hover-link {
+		position: absolute;
+		top: 33%;
+		left: 14%;
+		transform-origin: center;
+		z-index: 1;
+		font-family: var(--font-sans);
+		background: white;
+		color: var(--color-gray-800);
+		padding: var(--space-3xs) var(--space-2xs);
+		border-radius: var(--border-radius-base);
+		box-shadow: var(--box-shadow-md);
+		opacity: 0;
+		transition: opacity 0.3s ease-in-out;
+	}
+
+	.external-hover-link[data-small="true"] {
+		left: 9%;
+	}
+
+	.book-card {
+		display: flex;
+		position: relative;
+		top: 0;
+		left: 0;
+		flex-direction: column;
+		transition: all 0.3s ease-in-out;
+		margin: 0 var(--space-2xs) var(--space-2xs) 0;
+		padding: 0 var(--space-3xs) var(--space-l) var(--space-3xs);
+	}
+
+	.book-card[data-small="true"] {
+		padding: 0 0 var(--space-xs) 0;
+	}
+
+	.book-card img {
+		width: 100%;
+		height: auto;
+		max-width: 100%;
+		transition: all 0.3s ease-in-out;
+		border-radius: var(--border-radius-base);
+		box-shadow: var(--box-shadow-sm);
+		border: 1px solid var(--color-tinted-cream);
+	}
+
+	.book-card div {
+		transition: all 0.3s ease-in-out;
+	}
+
+	.book-card div p {
+		transition: all 0.3s ease-in-out;
+		margin: var(--space-xs) 0 var(--space-3xs) 0;
+		line-height: var(--leading-base);
+		color: var(--color-black);
+	}
+
+	.book-card[data-small="true"] div p {
+		margin: var(--space-2xs) 0 var(--space-3xs) 0;
+	}
+
+	.book-card:hover img {
+		box-shadow: var(--box-shadow-lg);
+		transform: scale3d(1.02, 1.02, 1.02);
+		opacity: 0.2;
+	}
+
+	.book-card:hover p {
+		color: var(--color-accent-brown);
+	}
+
+	.book-card:hover div {
+		transform: translateY(4px);
+	}
+
+	.book-card:hover .external-hover-link {
+		opacity: 1;
+	}
+</style>

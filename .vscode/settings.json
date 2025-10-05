@@ -1,0 +1,16 @@
+{
+  "[mdx]": {
+    "editor.quickSuggestions": {
+      "strings": true,
+      "comments": true,
+      "other": true
+    },
+    "editor.wordWrap": "wordWrapColumn",
+    "editor.wordWrapColumn": 80,
+    "editor.defaultFormatter": null
+  },
+  "files.associations": {
+    "*.mdx": "markdown"
+  },
+  "cSpell.words": ["zettelkasten"]
+}

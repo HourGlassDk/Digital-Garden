@@ -1,0 +1,50 @@
+---
+import { Tweet } from "astro-embed";
+
+const { tweetId } = Astro.props;
+---
+
+<div class="tweet-embed">
+	<Tweet id={`https://twitter.com/anyuser/status/${tweetId}`} />
+</div>
+
+<script>
+	declare global {
+		interface Window {
+			twttr: any;
+		}
+	}
+
+	function loadTwitterWidget() {
+		// Remove any existing Twitter script to prevent duplicates
+		const existingScript = document.querySelector(
+			'script[src="https://platform.twitter.com/widgets.js"]',
+		);
+		if (existingScript) {
+			existingScript.remove();
+		}
+
+		// Create and append new Twitter script
+		const script = document.createElement("script");
+		script.src = "https://platform.twitter.com/widgets.js";
+		script.async = true;
+		document.body.appendChild(script);
+
+		// Force widget load if window.twttr exists
+		if (window.twttr) {
+			window.twttr.widgets.load();
+		}
+	}
+
+	// Initialize on first load
+	loadTwitterWidget();
+
+	// Re-initialize after view transitions
+	document.addEventListener("astro:page-load", loadTwitterWidget);
+</script>
+
+<style>
+	.tweet-embed {
+		margin: 0 auto 1rem;
+	}
+</style>

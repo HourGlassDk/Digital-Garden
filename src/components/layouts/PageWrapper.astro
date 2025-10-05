@@ -1,0 +1,31 @@
+---
+interface Props {
+	class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<main class={className}>
+	<slot />
+</main>
+
+<style>
+	main {
+		max-width: 1420px;
+		margin: var(--space-l) auto var(--space-128);
+		padding: 0 var(--space-l);
+	}
+	@media (max-width: 768px) {
+		main {
+			margin: var(--space-s) auto var(--space-2xl);
+			padding: 0 var(--space-m);
+		}
+	}
+	@media (max-width: 576px) {
+		main {
+			margin: var(--space-xs) auto var(--space-xl);
+			padding: 0 var(--space-xs);
+		}
+	}
+</style>

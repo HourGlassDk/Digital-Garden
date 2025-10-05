@@ -1,0 +1,55 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Title2 from "../components/mdx/typography/Title2.astro";
+import PageWrapper from "../components/layouts/PageWrapper.astro";
+import BookCard from "../components/cards/BookCard.astro";
+import TitleWithCount from "../components/layouts/TitleWithCount.astro";
+import { getCollection } from "astro:content";
+
+const books = await getCollection("books");
+---
+
+<Layout title="Library of Karl August Krogh Nybo">
+	<PageWrapper>
+		<header style="margin-bottom: var(--space-2xl);">
+			<TitleWithCount posts={books}>
+				Library
+				<div style="color: var(--color-gray-300); display: inline-block">|</div>
+				<a href="/antilibrary" class="styled-link">Antilibrary</a>
+			</TitleWithCount>
+			<Title2
+				>Books I've read that significantly influenced how I see the world.</Title2
+			>
+		</header>
+		<section class="bookshelf-grid">
+			{
+				books.map((book) => (
+					<BookCard
+						subtitle={book.data.subtitle}
+						link={book.data.link}
+						title={book.data.title}
+						author={book.data.author}
+						cover={book.data.cover}
+					/>
+				))
+			}
+		</section>
+	</PageWrapper>
+</Layout>
+
+<style>
+	.styled-link {
+		color: var(--color-gray-300);
+		transition: all 0.4s ease-in-out;
+		cursor: pointer;
+	}
+	.styled-link:hover {
+		color: var(--color-primary-green);
+	}
+
+	.bookshelf-grid {
+		display: grid;
+		grid-gap: var(--space-s);
+		grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	}
+</style>

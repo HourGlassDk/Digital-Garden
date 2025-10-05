@@ -1,0 +1,83 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div class="back-to-top">
+	<button tabindex="-1" id="back-to-top-button">
+		Back To Top
+		<Icon name="heroicons:chevron-up-solid" width="28" height="28" />
+	</button>
+</div>
+
+<script>
+	function initializeBackToTop() {
+		const button = document.getElementById("back-to-top-button");
+		if (!button) return;
+
+		// Clean up existing listener
+		const existingHandler = (button as any)._backToTopHandler;
+		if (existingHandler) {
+			button.removeEventListener("click", existingHandler);
+		}
+
+		// Create new handler
+		const clickHandler = () => {
+			window.scrollTo(0, 0);
+		};
+
+		// Store handler for cleanup
+		(button as any)._backToTopHandler = clickHandler;
+		button.addEventListener("click", clickHandler);
+	}
+
+	// Initialize on page load
+	initializeBackToTop();
+
+	// Re-initialize after view transitions
+	document.addEventListener("astro:page-load", initializeBackToTop);
+</script>
+
+<style>
+	.back-to-top {
+		position: fixed;
+		bottom: 0.6rem;
+		left: 0.6rem;
+	}
+
+	button {
+		display: flex;
+		align-items: center;
+		gap: 4px;
+		border: none;
+		cursor: pointer;
+		border-radius: 4px;
+		padding: 4px 4px 4px 10px;
+		background: white;
+		font-family: var(--font-sans);
+		font-size: var(--font-size-xs);
+		color: var(--color-gray-300);
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		font-weight: 400;
+		transition: all 0.3s ease-in-out;
+	}
+
+	button :global(svg) {
+		transition: all 0.3s ease-in-out;
+	}
+
+	button:hover {
+		color: var(--color-primary-green);
+		transform: translateY(-4px);
+	}
+
+	button:hover :global(svg) {
+		color: var(--color-primary-green);
+	}
+
+	@media (max-width: 1100px) {
+		.back-to-top {
+			display: none;
+		}
+	}
+</style>

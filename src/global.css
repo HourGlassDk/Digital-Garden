@@ -1,0 +1,559 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap");
+
+@font-face {
+  font-family: "Canela Deck";
+  src:
+    local("CanelaDeck-Regular"),
+    url("/fonts/CanelaDeck-Regular.woff2") format("woff2"),
+    url("/fonts/CanelaDeck-Regular.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Canela Deck";
+  src:
+    local("CanelaDeck-Bold"),
+    url("/fonts/CanelaDeck-Bold.woff2") format("woff2"),
+    url("/fonts/CanelaDeck-Bold.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Canela Deck";
+  src:
+    local("CanelaDeck-Light"),
+    url("/fonts/CanelaDeck-Light.woff2") format("woff2"),
+    url("/fonts/CanelaDeck-Light.woff") format("woff");
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Canela Text";
+  src:
+    local("CanelaText-Medium"),
+    url("/fonts/CanelaText-Medium.woff2") format("woff2"),
+    url("/fonts/CanelaText-Medium.woff") format("woff");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Canela Text";
+  src:
+    local("CanelaText-Light"),
+    url("/fonts/CanelaText-Light.woff2") format("woff2"),
+    url("/fonts/CanelaText-Light.woff") format("woff");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Canela Text";
+  src:
+    local("CanelaText-LightItalic"),
+    url("/fonts/CanelaText-LightItalic.woff2") format("woff2"),
+    url("/fonts/CanelaText-LightItalic.woff") format("woff");
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+:root {
+  /* Spacing */
+  --space-4: 0.25rem;
+  --space-8: 0.5rem;
+  --space-12: 0.75rem;
+  --space-16: 1rem;
+  --space-24: 1.5rem;
+  --space-32: 2rem;
+  --space-48: 3rem;
+  --space-64: 4rem;
+  --space-80: 5rem;
+  --space-96: 6rem;
+  --space-128: 8rem;
+  --space-160: 10rem;
+
+  /* Colors */
+  --color-light-cream: #fcfbf7;
+  --color-cream: #f6f5f1;
+  --color-tinted-cream: #e6e3e1;
+  --color-black: #353534;
+  --color-gray-800: #4a4a46;
+  --color-gray-600: #73706d;
+  --color-gray-500: #8e8f94;
+  --color-gray-400: #afb0b6;
+  --color-gray-300: #d3d3d1;
+  --color-gray-200: #e3e3e0;
+  --color-gray-100: #e9e9e7;
+  --color-primary-green: oklch(73.54% 0.115 142.95);
+  --color-secondary-green: oklch(89.21% 0.052 136.44);
+  --color-accent-brown: oklch(33.613% 0.02347 39.176);
+  --color-light-brown: oklch(44.44% 0.03252 40.859);
+  --color-tertiary-green: oklch(63.54% 0.115 142.95);
+  --color-purple: oklch(73.54% 0.045 280);
+  --color-salmon: #fd8370;
+  --color-light-salmon: #ffd09c;
+  --color-dark-salmon: #e1624f;
+
+  /* Opacity variants for colors */
+  /* Green variants */
+  --color-primary-green-5: color-mix(in srgb, var(--color-primary-green) 5%, transparent);
+  --color-primary-green-10: color-mix(in srgb, var(--color-primary-green) 10%, transparent);
+  --color-primary-green-20: color-mix(in srgb, var(--color-primary-green) 20%, transparent);
+  --color-primary-green-50: color-mix(in srgb, var(--color-primary-green) 50%, transparent);
+
+  /* Brown variants */
+  --color-accent-brown-5: color-mix(in srgb, var(--color-accent-brown) 5%, transparent);
+  --color-accent-brown-10: color-mix(in srgb, var(--color-accent-brown) 10%, transparent);
+  --color-accent-brown-20: color-mix(in srgb, var(--color-accent-brown) 20%, transparent);
+  --color-accent-brown-50: color-mix(in srgb, var(--color-accent-brown) 50%, transparent);
+
+  /* Fonts */
+  --font-serif: "Canela Deck", serif;
+  --font-body: "Canela Text", serif;
+  --font-sans: "Lato", sans-serif;
+
+  /* Leading */
+  --leading-tighter: 110%;
+  --leading-tight: 120%;
+  --leading-snug: 130%;
+  --leading-base: 140%;
+  --leading-loose: 180%;
+  --leading-looser: 200%;
+
+  /* Border radius */
+  --border-radius-sm: 0.2rem;
+  --border-radius-base: 0.4rem;
+  --border-radius-lg: 0.6rem;
+
+  /* Box Shadows */
+  --box-shadow-sm: 0.2px 0.2px 0.8px -10px rgba(40, 10, 0, 0.014),
+    0.4px 0.4px 2px -10px rgba(40, 10, 0, 0.02), 0.8px 0.8px 3.8px -10px rgba(40, 10, 0, 0.025),
+    1.3px 1.3px 6.7px -10px rgba(40, 10, 0, 0.03), 2.5px 2.5px 12.5px -10px rgba(40, 10, 0, 0.036),
+    6px 6px 30px -10px rgba(40, 10, 0, 0.05);
+
+  --box-shadow-md: 1px 0.9px 2.3px -3px rgba(30, 10, 10, 0.04),
+    2.4px 2.2px 5.5px -3px rgba(30, 10, 10, 0.05), 4.5px 4.1px 10.4px -3px rgba(30, 10, 10, 0.06),
+    8px 7.4px 18.5px -3px rgba(30, 10, 10, 0.07), 15px 13.8px 34.7px -3px rgba(30, 10, 10, 0.08),
+    36px 33px 83px -3px rgba(30, 10, 10, 0.2);
+
+  --box-shadow-lg: 0.2px 0.4px 0.8px -10px rgba(0, 0, 0, 0.03),
+    0.4px 0.9px 2px -10px rgba(0, 0, 0, 0.03), 0.8px 1.8px 3.8px -10px rgba(0, 0, 0, 0.038),
+    1.3px 3.1px 6.7px -10px rgba(0, 0, 0, 0.045), 2.5px 5.8px 12.5px -10px rgba(0, 0, 0, 0.06),
+    6px 14px 30px -10px rgba(0, 0, 0, 0.08);
+
+  /* Fluid spacing */
+  --fc-3xs-min: (var(--fc-s-min) * 0.25);
+  --fc-3xs-max: (var(--fc-s-max) * 0.25);
+
+  --fc-2xs-min: (var(--fc-s-min) * 0.5);
+  --fc-2xs-max: (var(--fc-s-max) * 0.5);
+
+  --fc-xs-min: (var(--fc-s-min) * 0.75);
+  --fc-xs-max: (var(--fc-s-max) * 0.75);
+
+  --fc-s-min: (var(--f-0-min, 20));
+  --fc-s-max: (var(--f-0-max, 22));
+
+  --fc-m-min: (var(--fc-s-min) * 1.5);
+  --fc-m-max: (var(--fc-s-max) * 1.5);
+
+  --fc-l-min: (var(--fc-s-min) * 2);
+  --fc-l-max: (var(--fc-s-max) * 2);
+
+  --fc-xl-min: (var(--fc-s-min) * 3);
+  --fc-xl-max: (var(--fc-s-max) * 3);
+
+  --fc-2xl-min: (var(--fc-s-min) * 4);
+  --fc-2xl-max: (var(--fc-s-max) * 4);
+
+  --fc-3xl-min: (var(--fc-s-min) * 6);
+  --fc-3xl-max: (var(--fc-s-max) * 6);
+
+  --fc-4xl-min: (var(--fc-s-min) * 8);
+  --fc-4xl-max: (var(--fc-s-max) * 8);
+
+  /* T-shirt sizes */
+  --space-3xs: calc(
+    ((var(--fc-3xs-min) / 16) * 1rem) + (var(--fc-3xs-max) - var(--fc-3xs-min)) * var(--fluid-bp)
+  );
+  --space-2xs: calc(
+    ((var(--fc-2xs-min) / 16) * 1rem) + (var(--fc-2xs-max) - var(--fc-2xs-min)) * var(--fluid-bp)
+  );
+  --space-xs: calc(
+    ((var(--fc-xs-min) / 16) * 1rem) + (var(--fc-xs-max) - var(--fc-xs-min)) * var(--fluid-bp)
+  );
+  --space-s: calc(
+    ((var(--fc-s-min) / 16) * 1rem) + (var(--fc-s-max) - var(--fc-s-min)) * var(--fluid-bp)
+  );
+  --space-m: calc(
+    ((var(--fc-m-min) / 16) * 1rem) + (var(--fc-m-max) - var(--fc-m-min)) * var(--fluid-bp)
+  );
+  --space-l: calc(
+    ((var(--fc-l-min) / 16) * 1rem) + (var(--fc-l-max) - var(--fc-l-min)) * var(--fluid-bp)
+  );
+  --space-xl: calc(
+    ((var(--fc-xl-min) / 16) * 1rem) + (var(--fc-xl-max) - var(--fc-xl-min)) * var(--fluid-bp)
+  );
+  --space-2xl: calc(
+    ((var(--fc-2xl-min) / 16) * 1rem) + (var(--fc-2xl-max) - var(--fc-2xl-min)) * var(--fluid-bp)
+  );
+  --space-3xl: calc(
+    ((var(--fc-3xl-min) / 16) * 1rem) + (var(--fc-3xl-max) - var(--fc-3xl-min)) * var(--fluid-bp)
+  );
+  --space-4xl: calc(
+    ((var(--fc-4xl-min) / 16) * 1rem) + (var(--fc-4xl-max) - var(--fc-4xl-min)) * var(--fluid-bp)
+  );
+
+  /* One-up pairs */
+  --space-3xs-2xs: calc(
+    ((var(--fc-3xs-min) / 16) * 1rem) + (var(--fc-2xs-max) - var(--fc-3xs-min)) * var(--fluid-bp)
+  );
+  --space-2xs-xs: calc(
+    ((var(--fc-2xs-min) / 16) * 1rem) + (var(--fc-xs-max) - var(--fc-2xs-min)) * var(--fluid-bp)
+  );
+  --space-xs-s: calc(
+    ((var(--fc-xs-min) / 16) * 1rem) + (var(--fc-s-max) - var(--fc-xs-min)) * var(--fluid-bp)
+  );
+  --space-s-m: calc(
+    ((var(--fc-s-min) / 16) * 1rem) + (var(--fc-m-max) - var(--fc-s-min)) * var(--fluid-bp)
+  );
+  --space-m-l: calc(
+    ((var(--fc-m-min) / 16) * 1rem) + (var(--fc-l-max) - var(--fc-m-min)) * var(--fluid-bp)
+  );
+  --space-l-xl: calc(
+    ((var(--fc-l-min) / 16) * 1rem) + (var(--fc-xl-max) - var(--fc-l-min)) * var(--fluid-bp)
+  );
+  --space-xl-2xl: calc(
+    ((var(--fc-xl-min) / 16) * 1rem) + (var(--fc-2xl-max) - var(--fc-xl-min)) * var(--fluid-bp)
+  );
+  --space-2xl-3xl: calc(
+    ((var(--fc-2xl-min) / 16) * 1rem) + (var(--fc-3xl-max) - var(--fc-2xl-min)) * var(--fluid-bp)
+  );
+  --space-3xl-4xl: calc(
+    ((var(--fc-3xl-min) / 16) * 1rem) + (var(--fc-4xl-max) - var(--fc-3xl-min)) * var(--fluid-bp)
+  );
+
+  /* Fluid type scale */
+  /* @link https://utopia.fyi/type/calculator?c=320,20,1.25,1200,22,1.333,6,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l */
+
+  --fluid-min-width: 320;
+  --fluid-max-width: 1200;
+
+  --fluid-screen: 100vw;
+  --fluid-bp: calc(
+    (var(--fluid-screen) - var(--fluid-min-width) / 16 * 1rem) /
+      (var(--fluid-max-width) - var(--fluid-min-width))
+  );
+}
+
+@media screen and (min-width: 1200px) {
+  :root {
+    --fluid-screen: calc(var(--fluid-max-width) * 1px);
+  }
+}
+
+:root {
+  --f--2-min: 14.5;
+  --f--2-max: 15;
+  --font-size-xs: calc(
+    ((var(--f--2-min) / 16) * 1rem) + (var(--f--2-max) - var(--f--2-min)) * var(--fluid-bp)
+  );
+
+  --f--1-min: 16;
+  --f--1-max: 16.5;
+  --font-size-sm: calc(
+    ((var(--f--1-min) / 16) * 1rem) + (var(--f--1-max) - var(--f--1-min)) * var(--fluid-bp)
+  );
+
+  --f-0-min: 20;
+  --f-0-max: 22;
+  --font-size-base: calc(
+    ((var(--f-0-min) / 16) * 1rem) + (var(--f-0-max) - var(--f-0-min)) * var(--fluid-bp)
+  );
+
+  --f-1-min: 25;
+  --f-1-max: 28.6;
+  --font-size-md: calc(
+    ((var(--f-1-min) / 16) * 1rem) + (var(--f-1-max) - var(--f-1-min)) * var(--fluid-bp)
+  );
+
+  --f-2-min: 30;
+  --f-2-max: 36;
+  --font-size-lg: calc(
+    ((var(--f-2-min) / 16) * 1rem) + (var(--f-2-max) - var(--f-2-min)) * var(--fluid-bp)
+  );
+
+  --f-3-min: 39.06;
+  --f-3-max: 44;
+  --font-size-xl: calc(
+    ((var(--f-3-min) / 16) * 1rem) + (var(--f-3-max) - var(--f-3-min)) * var(--fluid-bp)
+  );
+
+  --f-4-min: 46.87;
+  --f-4-max: 56;
+  --font-size-2xl: calc(
+    ((var(--f-4-min) / 16) * 1rem) + (var(--f-4-max) - var(--f-4-min)) * var(--fluid-bp)
+  );
+
+  --f-5-min: 57.6;
+  --f-5-max: 81.8;
+  --font-size-3xl: calc(
+    ((var(--f-5-min) / 16) * 1rem) + (var(--f-5-max) - var(--f-5-min)) * var(--fluid-bp)
+  );
+
+  --f-6-min: 76.29;
+  --f-6-max: 106.34;
+  --font-size-4xl: calc(
+    ((var(--f-6-min) / 16) * 1rem) + (var(--f-6-max) - var(--f-6-min)) * var(--fluid-bp)
+  );
+}
+
+/* CSS Reset */
+/* Box sizing rules */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Remove default margin */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+/* Remove list styles on ul, ol elements with a list role, which suggests default styling will be removed */
+ul[role="list"],
+ol[role="list"] {
+  list-style: none;
+}
+
+/* Set core root defaults */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Set core body defaults */
+body {
+  min-height: 100vh;
+  text-rendering: optimizeSpeed;
+  line-height: 1.5;
+  /* scroll-behavior: smooth; */
+}
+
+/* A elements that don't have a class get default styles */
+a:not([class]) {
+  text-decoration-skip-ink: auto;
+}
+
+/* Make images easier to work with */
+img,
+picture {
+  max-width: 100%;
+  display: block;
+}
+
+/* Inherit fonts for inputs and buttons */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* Remove all animations, transitions and smooth scroll for people that prefer not to see them */
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+html,
+body,
+#root {
+  height: 100%;
+}
+
+iframe {
+  max-width: 100%;
+}
+
+/* _____________________ Base styles _____________________ */
+
+body {
+  background: var(--color-cream);
+  padding: var(--space-base);
+  color: var(--color-black);
+}
+
+h1,
+h2 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+}
+
+h1 {
+  font-size: var(--font-size-3xl);
+  font-family: var(--font-serif);
+  line-height: var(--leading-tighter);
+  font-weight: normal;
+  margin-bottom: var(--space-s);
+  max-width: 1200px;
+}
+
+@media screen and (max-width: 768px) {
+  h1 {
+    font-size: var(--font-size-2xl);
+    max-width: 100%;
+    margin-bottom: var(--space-xs);
+  }
+}
+
+h2 {
+  font-size: calc(var(--font-size-xl) / 1.2);
+  font-family: var(--font-serif);
+  color: var(--color-gray-800);
+  font-weight: 100;
+  line-height: var(--leading-snug);
+  margin: var(--space-xs) 0 var(--space-2xs);
+  transition: all 0.3s ease-in-out;
+}
+
+@media screen and (max-width: 768px) {
+  h2 {
+    font-size: var(--font-size-lg);
+  }
+}
+
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-sans);
+}
+
+p,
+ul,
+ol {
+  font-family: var(--font-body);
+  font-size: var(--font-size-base);
+  width: 100%;
+}
+
+a {
+  text-decoration: none;
+  color: var(--color-accent-brown);
+}
+
+code {
+  background: var(--color-cream);
+  padding: var(--space-8) var(--space-12);
+  border-radius: var(--border-radius-sm);
+  font-size: var(--font-size-base);
+  line-height: var(--leading-base);
+  font-family:
+    IBM Plex Mono,
+    Dank Mono,
+    SF Mono,
+    consolas;
+}
+
+/* Add styles for code blocks */
+pre {
+  width: 100%;
+  overflow: scroll;
+  padding: var(--space-24) var(--space-32);
+  border-radius: 0.3em;
+  font-size: calc(var(--font-size-sm) * 1.1);
+  line-height: var(--leading-loose);
+  font-family:
+    IBM Plex Mono,
+    Dank Mono,
+    SF Mono,
+    consolas;
+  margin: 0 0 var(--space-m);
+  tab-size: 3;
+  -moz-tab-size: 3;
+}
+
+pre code {
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+/* Style inline code differently from code blocks */
+:not(pre) > code {
+  font-size: 0.9em;
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+.metadata span,
+span.metadata {
+  font-size: var(--font-size-xs);
+  font-family: var(--font-sans);
+  color: var(--color-gray-600);
+}
+
+button {
+  background-color: var(---color-salmon);
+  border: none;
+  border-radius: var(---border-radius-sm);
+  padding: var(--space-12) var(--space-24);
+}
+
+mark {
+  background-color: var(--color-light-salmon);
+}
+
+.visually-hidden {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.small-caps {
+  font-size: var(--font-size-xs) !important;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  color: var(--color-gray-800);
+  text-transform: uppercase;
+  letter-spacing: 0.06rem;
+}
+
+.green {
+  color: var(--color-secondary-green);
+}

@@ -1,0 +1,36 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<div class="coming-soon-container">
+	<Icon name="budding" size={80} />
+	<h1>Coming Soon</h1>
+	<p>Feel free to bug me on Bluesky to finish writing this.</p>
+</div>
+
+<style>
+	.coming-soon-container {
+		margin: var(--space-xs) 0 var(--space-m);
+		box-shadow: var(--box-shadow-lg);
+		border-radius: var(--border-radius-lg);
+		border: 1px solid var(--color-tinted-cream);
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-2xs);
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+		padding: var(--space-l) var(--space-xs) var(--space-xl);
+	}
+
+	.coming-soon-container h1 {
+		font-size: var(--font-size-2xl);
+		font-weight: 600;
+		margin-bottom: var(--space-2xs);
+	}
+
+	.coming-soon-container p {
+		margin: 0;
+		line-height: var(--leading-tight);
+	}
+</style>

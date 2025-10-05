@@ -1,0 +1,63 @@
+---
+import { Icon } from "astro-icon/components";
+
+const { title, href, author } = Astro.props;
+---
+
+<div class="reference-link-container">
+	<a href={href} class="forward-hover-link">
+		<h4>{title}</h4>
+		<Icon name="heroicons:arrow-right-20-solid" size={16} />
+	</a>
+	{author && <span class="author">{author}</span>}
+</div>
+
+<style>
+	.forward-hover-link {
+		display: inline-block;
+		align-items: center;
+		justify-items: center;
+		cursor: pointer;
+	}
+
+	.forward-hover-link h4 {
+		display: inline-block;
+		transition: all 0.3s cubic-bezier(0.2, 1, 0.8, 1);
+		color: var(--color-gray-800);
+	}
+
+	.forward-hover-link :global(svg) {
+		position: relative;
+		top: 2.5px;
+		left: 6px;
+		transition: all 0.3s cubic-bezier(0.2, 1, 0.8, 1);
+		color: var(--color-gray-300);
+	}
+
+	.forward-hover-link:hover :global(svg) {
+		color: var(--color-primary-green);
+		left: 9px;
+	}
+
+	.forward-hover-link:hover h4 {
+		color: var(--color-primary-green);
+	}
+
+	.reference-link-container {
+		margin-bottom: var(--space-2xs);
+		transition: all 1s cubic-bezier(0.2, 1, 0.8, 1);
+	}
+
+	.reference-link-container h4,
+	.reference-link-container span {
+		font-size: var(--font-size-sm);
+		margin: 0;
+	}
+
+	.reference-link-container .author {
+		display: block;
+		margin: 0;
+		font-family: var(--font-sans);
+		color: var(--color-gray-500);
+	}
+</style>

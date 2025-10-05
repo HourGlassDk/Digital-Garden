@@ -1,0 +1,28 @@
+---
+interface Props {
+  margin?: string;
+  width?: string;
+  background?: string;
+}
+
+const { margin, width, background } = Astro.props;
+---
+
+<section class="full-width-section" style={{
+  maxWidth: width || "1000vw",
+  margin: margin || "var(--space-2xs) auto var(--space-m)",
+  background: background || "inherit"
+}}>
+  <slot />
+</section>
+
+<style>
+  .full-width-section {
+    width: 100%;
+    z-index: 0;
+    grid-column: 1 / 4 !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+</style>

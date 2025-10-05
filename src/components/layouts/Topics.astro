@@ -1,0 +1,46 @@
+---
+import { slugifyTopic } from "../../utils/slugifyTopic";
+import UnderlineHoverLink from "../mdx/UnderlineHoverLink.astro";
+
+const { topics } = Astro.props;
+---
+
+<ul class="styled-list">
+	{
+		topics.sort().map((topic: unknown) => {
+			const slug = slugifyTopic(topic);
+			return (
+				<li class="styled-tag">
+					<UnderlineHoverLink href={`/topics/${slug}`}>{topic}</UnderlineHoverLink>
+				</li>
+			);
+		})
+	}
+</ul>
+
+<style>
+	.styled-list {
+		list-style: none;
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		max-width: 70%;
+		padding: 0;
+		margin-top: var(--space-xs);
+	}
+
+	@media (max-width: 768px) {
+		.styled-list {
+			margin: var(--space-xs) 0 0 0;
+			max-width: 100%;
+		}
+	}
+
+	.styled-tag {
+		transition: all 0.3s ease-in-out;
+		margin-right: var(--space-xs);
+		margin-bottom: var(--space-3xs);
+		font-family: var(--font-sans);
+		font-size: var(--font-size-xs);
+	}
+</style>

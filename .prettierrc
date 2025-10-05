@@ -1,0 +1,12 @@
+{
+  "trailingComma": "all",
+  "printWidth": 100,
+  "overrides": [
+    {
+      "files": "*.mdx",
+      "options": {
+        "embeddedLanguageFormatting": "off"
+      }
+    }
+  ]
+}

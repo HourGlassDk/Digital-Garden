@@ -1,0 +1,113 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+import Title2 from "../components/mdx/typography/Title2.astro";
+import MasonryGrid from "../components/layouts/MasonryGrid.astro";
+import EssayCard from "../components/cards/EssayCard.astro";
+import TitleWithCount from "../components/layouts/TitleWithCount.astro";
+import PageWrapper from "../components/layouts/PageWrapper.astro";
+import { Icon } from "astro-icon/components";
+import { extractBaseSlug } from "../utils/versionUtils";
+
+// Get all essays that aren't drafts
+const essays = await getCollection("essays", ({ data }) => !data.draft);
+
+// Sort essays by date
+const sortedEssays = essays.sort(
+	(a, b) =>
+		new Date(b.data.updated).getTime() - new Date(a.data.updated).getTime(),
+);
+---
+
+<Layout title="Essays by Karl August Krogh Nybo">
+	<PageWrapper>
+		<header style="margin-bottom: var(--space-xl);">
+			<TitleWithCount posts={sortedEssays}>
+				<div class="back-link" slot="header-right">
+					<a href="/garden">
+						<Icon name="heroicons:arrow-left" size={16} />
+						<span> Back to Garden </span>
+					</a>
+				</div>
+				Essays
+			</TitleWithCount>
+			<Title2>Opinionated, longform narrative writing with an agenda.</Title2>
+		</header>
+		<MasonryGrid>
+			<div class="grid-sizer"></div>
+			{
+				sortedEssays.map((essay) => (
+					<div class="grid-item">
+						<EssayCard
+							id={essay.id}
+							slug={extractBaseSlug(essay.id)}
+							cover={essay.data.cover}
+							title={essay.data.title}
+							growthStage={essay.data.growthStage}
+							date={essay.data.updated}
+							description={essay.data.description}
+						/>
+					</div>
+				))
+			}
+		</MasonryGrid>
+	</PageWrapper>
+</Layout>
+
+<style>
+	.back-link {
+		display: inline-flex;
+		align-items: center;
+		height: 100%;
+		position: relative;
+		left: -2rem;
+	}
+
+	@media (max-width: 1440px) {
+		.back-link {
+			display: inline-flex;
+			top: 0;
+			margin: 0;
+			left: 1rem;
+		}
+	}
+
+	.back-link a {
+		display: inline-flex;
+		align-items: center;
+		position: relative;
+		font-family: var(--font-sans);
+		font-size: var(--font-size-xs);
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		font-weight: bold;
+		transition: all 0.8s cubic-bezier(0.2, 1, 0.8, 1);
+		margin: 0;
+		padding: 0;
+	}
+
+	.back-link svg {
+		width: 0;
+		transition: all 0.8s cubic-bezier(0.2, 1, 0.8, 1);
+		color: var(--color-gray-300);
+		position: relative;
+		top: 1px;
+	}
+
+	.back-link span {
+		display: inline-block;
+		transition: transform 0.3s cubic-bezier(0.2, 1, 0.8, 1);
+		color: var(--color-gray-600);
+	}
+
+	.back-link a:hover svg {
+		width: 16px;
+		margin-right: 2px;
+		color: var(--color-primary-green);
+	}
+
+	.back-link a:hover span {
+		transform: translate3d(3px, 0, 0);
+		color: var(--color-primary-green);
+	}
+</style>

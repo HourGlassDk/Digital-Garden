@@ -1,0 +1,70 @@
+---
+interface Props {
+	posts: any[];
+}
+
+const { posts } = Astro.props;
+const count = posts.length;
+const digits = count.toString().length;
+const leftOffset = `-${1 + digits}rem`;
+---
+
+<div class="styled-container" data-digits={digits} data-debug-count={count}>
+	<div class="mobile-header">
+		<div class="count-wrapper">
+			<span style={`left: ${leftOffset}`}>{count}</span>
+		</div>
+		<slot name="header-right" />
+	</div>
+	<h1><slot /></h1>
+</div>
+
+<style>
+	.mobile-header {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.count-wrapper {
+		position: relative;
+	}
+
+	span {
+		position: relative;
+		top: 3.4rem;
+		font-size: var(--font-size-md);
+		color: var(--color-primary-green);
+		font-weight: 400;
+	}
+
+	@media (max-width: 1440px) {
+		.count-wrapper {
+			display: inline-block;
+		}
+
+		span {
+			position: relative;
+			left: 4px !important;
+			top: -1px;
+			transform: none;
+			display: inline-block;
+			font-size: calc(var(--font-size-md) / 1.5);
+		}
+	}
+
+	h1 {
+		font-size: var(--font-size-3xl);
+		font-family: var(--font-serif);
+		line-height: var(--leading-tighter);
+		font-weight: normal;
+		margin-bottom: var(--space-s);
+	}
+
+	@media screen and (max-width: 550px) {
+		h1 {
+			font-size: var(--font-size-2xl);
+			margin: var(--space-3xs) 0 var(--space-2xs);
+		}
+	}
+</style>

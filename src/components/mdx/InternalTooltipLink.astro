@@ -1,0 +1,135 @@
+---
+import Tooltip from "./Tooltip.astro";
+
+interface Props {
+	href: string;
+	title: string;
+	description: string;
+}
+
+const { href, title, description } = Astro.props;
+---
+
+<Tooltip>
+	<span slot="content" class="tooltip-content">
+		<h4>{title}</h4>
+		<span class="description">{description}</span>
+	</span>
+	<span class="styled-container">
+		<a class="styled-link" href={href}>
+			<span><slot /></span>
+		</a>
+	</span>
+</Tooltip>
+
+<style>
+	.tooltip-content {
+		padding: var(--space-3xs);
+		display: inline-block;
+	}
+
+	.tooltip-content h4 {
+		margin: 0 0 var(--space-3xs);
+		font-family: var(--font-body);
+		font-weight: 500;
+		line-height: var(--leading-snug);
+		font-size: var(--font-size-base);
+	}
+
+	.tooltip-content .description {
+		display: block;
+		margin: var(--space-2xs) 0 var(--space-3xs);
+		font-family: var(--font-sans);
+		font-size: var(--font-size-sm);
+	}
+
+	.styled-container {
+		display: inline-block;
+		align-items: center;
+		justify-content: center;
+		position: relative;
+		left: 0px;
+		top: 0px;
+	}
+
+	.styled-link {
+		cursor: pointer;
+		position: relative;
+		white-space: nowrap;
+		outline: none;
+		word-break: break-all;
+	}
+
+	.styled-link:focus {
+		outline: 2px solid darkblue;
+		border-radius: 2px;
+	}
+
+	@media (min-width: 550px) {
+		.styled-link::before {
+			content: "";
+			display: inline-block;
+			transform-origin: 50% 100%;
+			background: var(--color-gray-300);
+			transition:
+				clip-path 0.3s,
+				transform 0.3s cubic-bezier(0.2, 1, 0.8, 1);
+			position: absolute;
+			width: 100%;
+			height: 1px;
+			top: 105%;
+			left: 0;
+			pointer-events: none;
+			clip-path: polygon(
+				0% 0%,
+				0% 100%,
+				50% 100%,
+				50% 0,
+				50% 0,
+				50% 100%,
+				50% 100%,
+				0 100%,
+				100% 100%,
+				100% 0%
+			);
+		}
+
+		.styled-link:hover::before {
+			display: inline-block;
+			transform: translate3d(0, 3px, 0) scale3d(1, 2, 1);
+			background: var(--color-primary-green);
+			clip-path: polygon(
+				0% 0%,
+				0% 100%,
+				50% 100%,
+				50% 0,
+				50% 0,
+				50% 100%,
+				50% 100%,
+				0 100%,
+				100% 100%,
+				100% 0%
+			);
+		}
+	}
+
+	.styled-link span {
+		display: inline-block;
+		white-space: normal;
+		transition: all 0.5s cubic-bezier(0.2, 1, 0.8, 1);
+		word-break: break-all;
+		color: var(--color-secondary-green);
+		text-decoration: underline;
+	}
+
+	@media (min-width: 550px) {
+		.styled-link span {
+			text-decoration: none;
+		}
+	}
+
+	.styled-link:hover span {
+		transform: translate3d(0, -1px, 0);
+		color: var(--color-tertiary-green);
+	}
+</style>

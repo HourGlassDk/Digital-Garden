@@ -1,0 +1,158 @@
+---
+import { Icon } from "astro-icon/components";
+import Tooltip from "./Tooltip.astro";
+
+interface Props {
+	authors: string;
+	year: string;
+	abstract?: string;
+	title: string;
+	href: string;
+}
+
+const { authors, year, abstract, title, href } = Astro.props;
+---
+
+<Tooltip maxWidth={440}>
+	<a href={href} class="styled-link">
+		<Icon name="heroicons:academic-cap" size={20} />
+		<span><slot /></span>
+	</a>
+
+	<div slot="content" class="tooltip-content">
+		<a href={href} class="title-link">
+			<span>{title}</span>
+			<Icon name="heroicons:arrow-top-right-on-square" size={16} />
+		</a>
+		<div class="author-year">
+			{authors}
+			<span class="dot">•</span>
+			{year}
+		</div>
+		{
+			abstract && (
+				<div class="abstract-container">
+					<span>Abstract</span>
+					<div class="full-abstract">{abstract}</div>
+				</div>
+			)
+		}
+	</div>
+</Tooltip>
+
+<style>
+	.styled-link {
+		cursor: pointer;
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		font: inherit;
+		line-height: inherit;
+		position: relative;
+		white-space: nowrap;
+		outline: none;
+		word-break: break-all;
+		color: var(--color-primary-green);
+	}
+
+	.styled-link:focus {
+		outline: 2px solid darkblue;
+		border-radius: 2px;
+	}
+
+	.styled-link span {
+		display: inline-block;
+		white-space: normal;
+		transition: all 0.5s cubic-bezier(0.2, 1, 0.8, 1);
+		word-break: break-all;
+	}
+
+	.styled-link:hover span {
+		transform: translate3d(0, -1px, 0);
+		color: var(--color-primary-green);
+	}
+
+	.styled-link :global(svg) {
+		position: relative;
+		top: 2px;
+	}
+
+	.title-link {
+		color: var(--color-dark-crimson);
+		transition: color 0.2s ease-in-out;
+		font-family: var(--font-body);
+		font-size: calc(var(--font-size-base) / 1.1);
+		line-height: var(--leading-snug);
+		font-weight: 400;
+		display: inline-flex;
+		gap: 12px;
+		margin-bottom: var(--space-2xs);
+	}
+
+	.title-link :global(svg) {
+		margin: 0 !important;
+		flex-shrink: 0;
+		position: relative;
+		top: 8px;
+		right: 8px;
+	}
+
+	.title-link:hover {
+		color: var(--color-primary-green);
+	}
+
+	.author-year {
+		color: var(--color-gray-600);
+	}
+
+	.dot {
+		margin: 0 6px;
+		color: var(--color-gray-400);
+		font-size: calc(var(--font-size-xs) / 1.1);
+	}
+
+	.abstract-container {
+		margin-top: var(--space-s);
+	}
+
+	.abstract-container span {
+		color: var(--color-primary-green);
+		text-transform: uppercase;
+		font-size: calc(var(--font-size-xs) / 1.1);
+		letter-spacing: 0.04rem;
+		font-weight: 500;
+	}
+
+	.full-abstract {
+		max-height: 200px;
+		overflow-y: auto;
+		padding-right: 12px;
+		margin-top: var(--space-3xs);
+		line-height: var(--leading-base);
+	}
+
+	.full-abstract::-webkit-scrollbar {
+		width: 6px;
+	}
+
+	.full-abstract::-webkit-scrollbar-track {
+		background: var(--color-gray-100);
+		border-radius: 3px;
+	}
+
+	.full-abstract::-webkit-scrollbar-thumb {
+		background: var(--color-gray-300);
+		border-radius: 3px;
+	}
+
+	.tooltip-content {
+		padding: var(--space-3xs);
+		padding-right: 0;
+	}
+
+	@media (min-width: 550px) {
+		.styled-link span {
+			text-decoration: none;
+		}
+	}
+</style>
