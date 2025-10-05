@@ -1,6 +1,6 @@
 # karlaugustnybo.com, Version 3
 
-This is the source code for karlaugustnybo.com, a digital garden filled with growing notes, essays,
+This is the source code for karlaugust.vercel.app, a digital garden filled with growing notes, essays,
 and design patterns.
 
 It's open source to let people poke around and get ideas for their own garden. However, I'd rather
